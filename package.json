@@ -1,6 +1,6 @@
 {
   "name": "gladys-sncf",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "External Gladys Assistant integration for SNCF trains: next departures of your trips, delays, cancellations, disruptions, scenes and dashboard widgets.",
   "homepage": "https://github.com/William-De71/gladys-sncf",
