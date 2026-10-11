@@ -1,0 +1,924 @@
+{
+  "feed_publishers": [
+    {
+      "id": "sncf",
+      "name": "SNCF PIV Production",
+      "url": "",
+      "license": "Private (unspecified)"
+    },
+    {
+      "id": "SNCF:sncf-piv",
+      "name": "SNCF PIV Production",
+      "url": "",
+      "license": "Private (unspecified)"
+    }
+  ],
+  "links": [
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/journeys?from=stop_area%3ASNCF%3A87757674&to=stop_area%3ASNCF%3A87756056&data_freshness=realtime&count=1&datetime=20230520T194901&datetime_represents=departure",
+      "templated": false,
+      "rel": "next",
+      "type": "next"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/journeys?from=stop_area%3ASNCF%3A87757674&to=stop_area%3ASNCF%3A87756056&data_freshness=realtime&count=1&datetime=20230520T201159&datetime_represents=arrival",
+      "templated": false,
+      "rel": "prev",
+      "type": "prev"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/journeys?from=stop_area%3ASNCF%3A87757674&to=stop_area%3ASNCF%3A87756056&data_freshness=realtime&count=1&datetime=20230520T000000&datetime_represents=departure",
+      "templated": false,
+      "rel": "first",
+      "type": "first"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/journeys?from=stop_area%3ASNCF%3A87757674&to=stop_area%3ASNCF%3A87756056&data_freshness=realtime&count=1&datetime=20230520T235959&datetime_represents=arrival",
+      "templated": false,
+      "rel": "last",
+      "type": "last"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/routes\/{route.id}",
+      "templated": true,
+      "rel": "routes",
+      "type": "route"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/physical_modes\/{physical_mode.id}",
+      "templated": true,
+      "rel": "physical_modes",
+      "type": "physical_mode"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/stop_points\/{stop_point.id}",
+      "templated": true,
+      "rel": "stop_points",
+      "type": "stop_point"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/lines\/{line.id}",
+      "templated": true,
+      "rel": "lines",
+      "type": "line"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/vehicle_journeys\/{vehicle_journey.id}",
+      "templated": true,
+      "rel": "vehicle_journeys",
+      "type": "vehicle_journey"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/trips\/{trip.id}",
+      "templated": true,
+      "rel": "trips",
+      "type": "trip"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/commercial_modes\/{commercial_mode.id}",
+      "templated": true,
+      "rel": "commercial_modes",
+      "type": "commercial_mode"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/stop_areas\/{stop_area.id}",
+      "templated": true,
+      "rel": "stop_areas",
+      "type": "stop_area"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/disruptions\/{disruption.id}",
+      "templated": true,
+      "rel": "disruptions",
+      "type": "disruption"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/disruptions\/{disruptions.id}",
+      "templated": true,
+      "rel": "disruptions",
+      "type": "disruptions"
+    },
+    {
+      "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/networks\/{network.id}",
+      "templated": true,
+      "rel": "networks",
+      "type": "network"
+    }
+  ],
+  "journeys": [
+    {
+      "duration": 1380,
+      "nb_transfers": 0,
+      "departure_date_time": "20230520T194900",
+      "arrival_date_time": "20230520T201200",
+      "requested_date_time": "20230520T194611",
+      "type": "best",
+      "status": "SIGNIFICANT_DELAYS",
+      "tags": ["walking", "ecologic"],
+      "co2_emission": {
+        "value": 207.8335,
+        "unit": "gEC"
+      },
+      "air_pollutants": {
+        "unit": "g",
+        "values": {
+          "nox": 0.0,
+          "pm": 0.0
+        }
+      },
+      "durations": {
+        "total": 1380,
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "distances": {
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "fare": {
+        "found": false,
+        "total": {
+          "value": "0.0"
+        },
+        "links": []
+      },
+      "sections": [
+        {
+          "id": "SfD7QfMrbjwieNgaGzB2z5_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20230520T194900",
+          "arrival_date_time": "20230520T194900",
+          "to": {
+            "id": "stop_point:SNCF:87757674:Train",
+            "name": "Antibes (Antibes)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87757674:Train",
+              "name": "Antibes",
+              "label": "Antibes (Antibes)",
+              "coord": {
+                "lon": "7.119913",
+                "lat": "43.585971"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06004",
+                  "name": "Antibes",
+                  "level": 8,
+                  "zip_code": "06160;06600",
+                  "label": "Antibes (06160-06600)",
+                  "insee": "06004",
+                  "coord": {
+                    "lon": "7.10905",
+                    "lat": "43.5836"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87757674",
+                "name": "Antibes",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87757674"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87757674"
+                  }
+                ],
+                "timezone": "Europe\/Paris",
+                "label": "Antibes (Antibes)",
+                "coord": {
+                  "lon": "7.119913",
+                  "lat": "43.585971"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_area:SNCF:87757674",
+            "name": "Antibes (Antibes)",
+            "quality": 0,
+            "stop_area": {
+              "id": "stop_area:SNCF:87757674",
+              "name": "Antibes",
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87757674"
+                },
+                {
+                  "type": "uic",
+                  "value": "87757674"
+                }
+              ],
+              "timezone": "Europe\/Paris",
+              "label": "Antibes (Antibes)",
+              "coord": {
+                "lon": "7.119913",
+                "lat": "43.585971"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06004",
+                  "name": "Antibes",
+                  "level": 8,
+                  "zip_code": "06160;06600",
+                  "label": "Antibes (06160-06600)",
+                  "insee": "06004",
+                  "coord": {
+                    "lon": "7.10905",
+                    "lat": "43.5836"
+                  }
+                }
+              ]
+            },
+            "embedded_type": "stop_area"
+          },
+          "geojson": {
+            "type": "LineString",
+            "coordinates": [
+              [7.119913, 43.585971],
+              [7.119913, 43.585971]
+            ],
+            "properties": [
+              {
+                "length": 0
+              }
+            ]
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        },
+        {
+          "id": "section_0_0",
+          "duration": 1380,
+          "co2_emission": {
+            "value": 207.8335,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20230520T194900",
+          "arrival_date_time": "20230520T201200",
+          "base_departure_date_time": "20230520T191400",
+          "base_arrival_date_time": "20230520T193700",
+          "data_freshness": "realtime",
+          "to": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe\/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_point:SNCF:87757674:Train",
+            "name": "Antibes (Antibes)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87757674:Train",
+              "name": "Antibes",
+              "label": "Antibes (Antibes)",
+              "coord": {
+                "lon": "7.119913",
+                "lat": "43.585971"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06004",
+                  "name": "Antibes",
+                  "level": 8,
+                  "zip_code": "06160;06600",
+                  "label": "Antibes (06160-06600)",
+                  "insee": "06004",
+                  "coord": {
+                    "lon": "7.10905",
+                    "lat": "43.5836"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87757674",
+                "name": "Antibes",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87757674"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87757674"
+                  }
+                ],
+                "timezone": "Europe\/Paris",
+                "label": "Antibes (Antibes)",
+                "coord": {
+                  "lon": "7.119913",
+                  "lat": "43.585971"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "additional_informations": ["regular"],
+          "geojson": {
+            "type": "LineString",
+            "coordinates": [
+              [7.119913, 43.585971],
+              [7.216199, 43.670728],
+              [7.261904, 43.704556]
+            ],
+            "properties": [
+              {
+                "length": 17465
+              }
+            ]
+          },
+          "type": "public_transport",
+          "display_informations": {
+            "commercial_mode": "TER",
+            "network": "TER",
+            "direction": "Nice (Nice)",
+            "label": "Marseille - Nice",
+            "color": "",
+            "code": "",
+            "name": "Marseille - Nice",
+            "links": [
+              {
+                "templated": false,
+                "rel": "disruptions",
+                "internal": true,
+                "type": "disruption",
+                "id": "0ac40d1c-95dc-4da1-9c00-2c3daa806766"
+              },
+              {
+                "templated": false,
+                "rel": "terminus",
+                "internal": true,
+                "type": "stop_area",
+                "id": "stop_area:SNCF:87751008"
+              }
+            ],
+            "text_color": "",
+            "description": "",
+            "physical_mode": "TER \/ Intercités",
+            "equipments": [],
+            "headsign": "17491",
+            "trip_short_name": "17491"
+          },
+          "links": [
+            {
+              "type": "vehicle_journey",
+              "id": "vehicle_journey:SNCF:2023-05-20:17491:1187:Train:RealTime:3f52f981-0e0e-4be5-acdc-12d913b82857"
+            },
+            {
+              "type": "line",
+              "id": "line:SNCF:FR:Line::507B8DD6-051D-4DE5-8895-5DA0A019D31D:"
+            },
+            {
+              "type": "route",
+              "id": "route:SNCF:FR:Line::507B8DD6-051D-4DE5-8895-5DA0A019D31D:"
+            },
+            {
+              "type": "commercial_mode",
+              "id": "commercial_mode:TER"
+            },
+            {
+              "type": "physical_mode",
+              "id": "physical_mode:Train"
+            },
+            {
+              "type": "network",
+              "id": "network:SNCF:TER"
+            }
+          ],
+          "stop_date_times": [
+            {
+              "departure_date_time": "20230520T194900",
+              "base_departure_date_time": "20230520T191400",
+              "arrival_date_time": "20230520T194700",
+              "base_arrival_date_time": "20230520T191200",
+              "stop_point": {
+                "id": "stop_point:SNCF:87757674:Train",
+                "name": "Antibes",
+                "label": "Antibes (Antibes)",
+                "coord": {
+                  "lon": "7.119913",
+                  "lat": "43.585971"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20230520T200400",
+              "base_departure_date_time": "20230520T192900",
+              "arrival_date_time": "20230520T200200",
+              "base_arrival_date_time": "20230520T192700",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756254:Train",
+                "name": "Nice Saint-Augustin",
+                "label": "Nice Saint-Augustin (Nice)",
+                "coord": {
+                  "lon": "7.216199",
+                  "lat": "43.670728"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20230520T201200",
+              "base_departure_date_time": "20230520T193700",
+              "arrival_date_time": "20230520T201200",
+              "base_arrival_date_time": "20230520T193700",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756056:Train",
+                "name": "Nice",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            }
+          ]
+        },
+        {
+          "id": "J6Q5VWMTXR6nMzPEFTWwUN_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20230520T201200",
+          "arrival_date_time": "20230520T201200",
+          "to": {
+            "id": "stop_area:SNCF:87756056",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_area": {
+              "id": "stop_area:SNCF:87756056",
+              "name": "Nice",
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756056"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756056"
+                }
+              ],
+              "timezone": "Europe\/Paris",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ]
+            },
+            "embedded_type": "stop_area"
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe\/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "geojson": {
+            "type": "LineString",
+            "coordinates": [
+              [7.261904, 43.704556],
+              [7.261904, 43.704556]
+            ],
+            "properties": [
+              {
+                "length": 0
+              }
+            ]
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        }
+      ],
+      "links": [
+        {
+          "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/journeys?from=stop_area%3ASNCF%3A87757674&to=stop_area%3ASNCF%3A87756056&data_freshness=realtime&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&direct_path=none&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point%3ASNCF%3A87757674%3ATrain&allowed_id%5B%5D=stop_point%3ASNCF%3A87756056%3ATrain&datetime=20230520T194900",
+          "templated": false,
+          "rel": "same_journey_schedules",
+          "type": "journeys"
+        },
+        {
+          "href": "https:\/\/api.sncf.com\/v1\/coverage\/sncf\/journeys?from=stop_area%3ASNCF%3A87757674&to=stop_area%3ASNCF%3A87756056&data_freshness=realtime&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&direct_path=none&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point%3ASNCF%3A87757674%3ATrain&allowed_id%5B%5D=stop_point%3ASNCF%3A87756056%3ATrain&datetime=20230520T194900",
+          "templated": false,
+          "rel": "this_journey",
+          "type": "journeys"
+        }
+      ]
+    }
+  ],
+  "tickets": [],
+  "disruptions": [
+    {
+      "id": "0ac40d1c-95dc-4da1-9c00-2c3daa806766",
+      "disruption_id": "0ac40d1c-95dc-4da1-9c00-2c3daa806766",
+      "impact_id": "0ac40d1c-95dc-4da1-9c00-2c3daa806766",
+      "application_periods": [
+        {
+          "begin": "20230520T165700",
+          "end": "20230520T201200"
+        }
+      ],
+      "status": "active",
+      "updated_at": "20230520T193409",
+      "cause": "",
+      "severity": {
+        "name": "trip delayed",
+        "effect": "SIGNIFICANT_DELAYS",
+        "color": "#000000",
+        "priority": 42
+      },
+      "messages": [
+        {
+          "text": "Panne d'un aiguillage",
+          "channel": {
+            "content_type": "",
+            "id": "rt",
+            "name": "rt",
+            "types": ["web", "mobile"]
+          }
+        }
+      ],
+      "impacted_objects": [
+        {
+          "pt_object": {
+            "id": "SNCF:2023-05-20:17491:1187:Train",
+            "name": "SNCF:2023-05-20:17491:1187:Train",
+            "quality": 0,
+            "trip": {
+              "id": "SNCF:2023-05-20:17491:1187:Train",
+              "name": "17491"
+            },
+            "embedded_type": "trip"
+          },
+          "impacted_stops": [
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87751008:Train",
+                "name": "Marseille - Saint-Charles",
+                "label": "Marseille - Saint-Charles (Marseille)",
+                "coord": {
+                  "lon": "5.380407",
+                  "lat": "43.302666"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "165700",
+              "base_departure_time": "165700",
+              "amended_arrival_time": "173700",
+              "amended_departure_time": "173700",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "delayed",
+              "arrival_status": "unchanged",
+              "is_detour": false
+            },
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87755009:Train",
+                "name": "Toulon",
+                "label": "Toulon (Toulon)",
+                "coord": {
+                  "lon": "5.929404",
+                  "lat": "43.128353"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "174000",
+              "base_departure_time": "174200",
+              "amended_arrival_time": "182000",
+              "amended_departure_time": "182200",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "delayed",
+              "arrival_status": "delayed",
+              "is_detour": false
+            },
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87755447:Train",
+                "name": "Les Arcs - Draguignan",
+                "label": "Les Arcs - Draguignan (Les Arcs-sur-Argens)",
+                "coord": {
+                  "lon": "6.482424",
+                  "lat": "43.455725"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "181600",
+              "base_departure_time": "181800",
+              "amended_arrival_time": "185600",
+              "amended_departure_time": "185800",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "delayed",
+              "arrival_status": "delayed",
+              "is_detour": false
+            },
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87757526:Train",
+                "name": "Saint-Raphaël - Valescure",
+                "label": "Saint-Raphaël - Valescure (Saint-Raphaël)",
+                "coord": {
+                  "lon": "6.769037",
+                  "lat": "43.423631"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "183200",
+              "base_departure_time": "183400",
+              "amended_arrival_time": "191200",
+              "amended_departure_time": "191400",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "delayed",
+              "arrival_status": "delayed",
+              "is_detour": false
+            },
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87757625:Train",
+                "name": "Cannes",
+                "label": "Cannes (Cannes)",
+                "coord": {
+                  "lon": "7.019711",
+                  "lat": "43.553908"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "185830",
+              "base_departure_time": "190100",
+              "amended_arrival_time": "193330",
+              "amended_departure_time": "193600",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "delayed",
+              "arrival_status": "delayed",
+              "is_detour": false
+            },
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87757674:Train",
+                "name": "Antibes",
+                "label": "Antibes (Antibes)",
+                "coord": {
+                  "lon": "7.119913",
+                  "lat": "43.585971"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "191200",
+              "base_departure_time": "191400",
+              "amended_arrival_time": "194700",
+              "amended_departure_time": "194900",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "delayed",
+              "arrival_status": "delayed",
+              "is_detour": false
+            },
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87756254:Train",
+                "name": "Nice Saint-Augustin",
+                "label": "Nice Saint-Augustin (Nice)",
+                "coord": {
+                  "lon": "7.216199",
+                  "lat": "43.670728"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "192700",
+              "base_departure_time": "192900",
+              "amended_arrival_time": "200200",
+              "amended_departure_time": "200400",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "delayed",
+              "arrival_status": "delayed",
+              "is_detour": false
+            },
+            {
+              "stop_point": {
+                "id": "stop_point:SNCF:87756056:Train",
+                "name": "Nice",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "base_arrival_time": "193700",
+              "base_departure_time": "193700",
+              "amended_arrival_time": "201200",
+              "amended_departure_time": "201200",
+              "cause": "Panne d'un aiguillage",
+              "stop_time_effect": "delayed",
+              "departure_status": "unchanged",
+              "arrival_status": "delayed",
+              "is_detour": false
+            }
+          ]
+        }
+      ],
+      "uri": "0ac40d1c-95dc-4da1-9c00-2c3daa806766",
+      "disruption_uri": "0ac40d1c-95dc-4da1-9c00-2c3daa806766",
+      "contributor": "realtime.sncf.piv"
+    }
+  ],
+  "terminus": [
+    {
+      "id": "stop_area:SNCF:87751008",
+      "name": "Marseille - Saint-Charles",
+      "codes": [
+        {
+          "type": "source",
+          "value": "87751008"
+        },
+        {
+          "type": "uic",
+          "value": "87751008"
+        }
+      ],
+      "timezone": "Europe\/Paris",
+      "label": "Marseille - Saint-Charles (Marseille)",
+      "coord": {
+        "lon": "5.380407",
+        "lat": "43.302666"
+      },
+      "links": []
+    }
+  ],
+  "context": {
+    "car_direct_path": {
+      "co2_emission": {
+        "value": 4335.1080286466,
+        "unit": "gEC"
+      },
+      "air_pollutants": {
+        "unit": "g",
+        "values": {
+          "nox": 7.6789,
+          "pm": 0.9773
+        }
+      }
+    },
+    "current_datetime": "20230520T194611",
+    "timezone": "Europe\/Paris"
+  },
+  "notes": [],
+  "exceptions": []
+}

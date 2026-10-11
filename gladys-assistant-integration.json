@@ -1,0 +1,1204 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "SNCF",
+  "description": {
+    "en": "Your SNCF trains in real time: delays, cancellations, scenes, widgets.",
+    "fr": "Vos trains SNCF en temps réel : retards, suppressions, scènes, widgets."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-sncf:0.1.0",
+  "gladys_version": ">=5.1.1",
+  "categories": ["services"],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-sncf/main/cover.jpg",
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "SNCF API key",
+        "fr": "Clé d’API SNCF"
+      },
+      "description": {
+        "en": "The trains come from the official SNCF API: TER, TGV INOUI, OUIGO, Intercités, Lyria, Eurostar… in real time (Transilien: timetable only, no delays). The key is free: fill in the form of the SNCF developer page, the key arrives by email. It allows 5 000 requests a day; the integration counts them and slows down before the limit.",
+        "fr": "Les trains viennent de l’API officielle de la SNCF : TER, TGV INOUI, OUIGO, Intercités, Lyria, Eurostar… en temps réel (Transilien : horaires théoriques seulement, sans retards). La clé est gratuite : remplissez le formulaire de la page développeur SNCF, la clé arrive par email. Elle autorise 5 000 requêtes par jour ; l’intégration les compte et ralentit avant la limite."
+      },
+      "links": [
+        {
+          "url": "https://numerique.sncf.com/startup/api/token-developpeur/",
+          "label": {
+            "en": "Get a free API key",
+            "fr": "Obtenir une clé gratuite"
+          }
+        },
+        {
+          "url": "https://numerique.sncf.com/startup/api/",
+          "label": {
+            "en": "About the SNCF API",
+            "fr": "À propos de l’API SNCF"
+          }
+        }
+      ]
+    },
+    {
+      "key": "api_key",
+      "type": "secret",
+      "label": {
+        "en": "API key",
+        "fr": "Clé d’API"
+      },
+      "description": {
+        "en": "The key received by email (a UUID, 36 characters).",
+        "fr": "La clé reçue par email (un UUID, 36 caractères)."
+      },
+      "required": true
+    },
+    {
+      "key": "trip_1_section",
+      "type": "section",
+      "label": {
+        "en": "Trip 1",
+        "fr": "Trajet 1"
+      },
+      "description": {
+        "en": "A station name (\"Rennes\", \"Lyon Part Dieu\"), its UIC code (\"87471003\") or the identifier given by the \"Find a station\" button (\"stop_area:SNCF:87471003\"). Only direct trains are followed. The travel window and days are optional: with them, the trains of the next window are followed and the API is read often only around it (it saves the daily quota).",
+        "fr": "Un nom de gare (« Rennes », « Lyon Part Dieu »), son code UIC (« 87471003 ») ou l’identifiant donné par le bouton « Chercher une gare » (« stop_area:SNCF:87471003 »). Seuls les trains directs sont suivis. La plage horaire et les jours sont optionnels : avec eux, ce sont les trains de la prochaine plage qui sont suivis, et l’API n’est lue souvent qu’autour d’elle (cela économise le quota quotidien)."
+      }
+    },
+    {
+      "key": "trip_1_from",
+      "type": "string",
+      "label": {
+        "en": "Departure station",
+        "fr": "Gare de départ"
+      },
+      "placeholder": {
+        "en": "Rennes",
+        "fr": "Rennes"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_1_to",
+      "type": "string",
+      "label": {
+        "en": "Arrival station",
+        "fr": "Gare d’arrivée"
+      },
+      "placeholder": {
+        "en": "Nantes",
+        "fr": "Nantes"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_1_hours",
+      "type": "string",
+      "label": {
+        "en": "Travel window",
+        "fr": "Plage horaire"
+      },
+      "description": {
+        "en": "Departures between these times, e.g. 07:00-09:30. Empty: the next trains, all day.",
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée."
+      },
+      "placeholder": {
+        "en": "07:00-09:30",
+        "fr": "07:00-09:30"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_1_days",
+      "type": "multi_select",
+      "label": {
+        "en": "Travel days",
+        "fr": "Jours de trajet"
+      },
+      "description": {
+        "en": "Empty: every day.",
+        "fr": "Vide : tous les jours."
+      },
+      "options": [
+        {
+          "value": "mon",
+          "label": {
+            "en": "Monday",
+            "fr": "Lundi"
+          }
+        },
+        {
+          "value": "tue",
+          "label": {
+            "en": "Tuesday",
+            "fr": "Mardi"
+          }
+        },
+        {
+          "value": "wed",
+          "label": {
+            "en": "Wednesday",
+            "fr": "Mercredi"
+          }
+        },
+        {
+          "value": "thu",
+          "label": {
+            "en": "Thursday",
+            "fr": "Jeudi"
+          }
+        },
+        {
+          "value": "fri",
+          "label": {
+            "en": "Friday",
+            "fr": "Vendredi"
+          }
+        },
+        {
+          "value": "sat",
+          "label": {
+            "en": "Saturday",
+            "fr": "Samedi"
+          }
+        },
+        {
+          "value": "sun",
+          "label": {
+            "en": "Sunday",
+            "fr": "Dimanche"
+          }
+        }
+      ],
+      "required": false
+    },
+    {
+      "key": "trip_2_section",
+      "type": "section",
+      "label": {
+        "en": "Trip 2 (optional)",
+        "fr": "Trajet 2 (optionnel)"
+      },
+      "description": {
+        "en": "Same fields as trip 1, for example the way back. Leave empty when unused.",
+        "fr": "Mêmes champs que le trajet 1, par exemple le retour. Laissez vide si inutile."
+      }
+    },
+    {
+      "key": "trip_2_from",
+      "type": "string",
+      "label": {
+        "en": "Departure station",
+        "fr": "Gare de départ"
+      },
+      "placeholder": {
+        "en": "Nantes",
+        "fr": "Nantes"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_2_to",
+      "type": "string",
+      "label": {
+        "en": "Arrival station",
+        "fr": "Gare d’arrivée"
+      },
+      "placeholder": {
+        "en": "Rennes",
+        "fr": "Rennes"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_2_hours",
+      "type": "string",
+      "label": {
+        "en": "Travel window",
+        "fr": "Plage horaire"
+      },
+      "description": {
+        "en": "Departures between these times, e.g. 07:00-09:30. Empty: the next trains, all day.",
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée."
+      },
+      "placeholder": {
+        "en": "17:00-19:30",
+        "fr": "17:00-19:30"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_2_days",
+      "type": "multi_select",
+      "label": {
+        "en": "Travel days",
+        "fr": "Jours de trajet"
+      },
+      "description": {
+        "en": "Empty: every day.",
+        "fr": "Vide : tous les jours."
+      },
+      "options": [
+        {
+          "value": "mon",
+          "label": {
+            "en": "Monday",
+            "fr": "Lundi"
+          }
+        },
+        {
+          "value": "tue",
+          "label": {
+            "en": "Tuesday",
+            "fr": "Mardi"
+          }
+        },
+        {
+          "value": "wed",
+          "label": {
+            "en": "Wednesday",
+            "fr": "Mercredi"
+          }
+        },
+        {
+          "value": "thu",
+          "label": {
+            "en": "Thursday",
+            "fr": "Jeudi"
+          }
+        },
+        {
+          "value": "fri",
+          "label": {
+            "en": "Friday",
+            "fr": "Vendredi"
+          }
+        },
+        {
+          "value": "sat",
+          "label": {
+            "en": "Saturday",
+            "fr": "Samedi"
+          }
+        },
+        {
+          "value": "sun",
+          "label": {
+            "en": "Sunday",
+            "fr": "Dimanche"
+          }
+        }
+      ],
+      "required": false
+    },
+    {
+      "key": "trip_3_section",
+      "type": "section",
+      "label": {
+        "en": "Trip 3 (optional)",
+        "fr": "Trajet 3 (optionnel)"
+      },
+      "description": {
+        "en": "Same fields as trip 1, for example the way back. Leave empty when unused.",
+        "fr": "Mêmes champs que le trajet 1, par exemple le retour. Laissez vide si inutile."
+      }
+    },
+    {
+      "key": "trip_3_from",
+      "type": "string",
+      "label": {
+        "en": "Departure station",
+        "fr": "Gare de départ"
+      },
+      "placeholder": {
+        "en": "Nantes",
+        "fr": "Nantes"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_3_to",
+      "type": "string",
+      "label": {
+        "en": "Arrival station",
+        "fr": "Gare d’arrivée"
+      },
+      "placeholder": {
+        "en": "Rennes",
+        "fr": "Rennes"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_3_hours",
+      "type": "string",
+      "label": {
+        "en": "Travel window",
+        "fr": "Plage horaire"
+      },
+      "description": {
+        "en": "Departures between these times, e.g. 07:00-09:30. Empty: the next trains, all day.",
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée."
+      },
+      "placeholder": {
+        "en": "17:00-19:30",
+        "fr": "17:00-19:30"
+      },
+      "required": false
+    },
+    {
+      "key": "trip_3_days",
+      "type": "multi_select",
+      "label": {
+        "en": "Travel days",
+        "fr": "Jours de trajet"
+      },
+      "description": {
+        "en": "Empty: every day.",
+        "fr": "Vide : tous les jours."
+      },
+      "options": [
+        {
+          "value": "mon",
+          "label": {
+            "en": "Monday",
+            "fr": "Lundi"
+          }
+        },
+        {
+          "value": "tue",
+          "label": {
+            "en": "Tuesday",
+            "fr": "Mardi"
+          }
+        },
+        {
+          "value": "wed",
+          "label": {
+            "en": "Wednesday",
+            "fr": "Mercredi"
+          }
+        },
+        {
+          "value": "thu",
+          "label": {
+            "en": "Thursday",
+            "fr": "Jeudi"
+          }
+        },
+        {
+          "value": "fri",
+          "label": {
+            "en": "Friday",
+            "fr": "Vendredi"
+          }
+        },
+        {
+          "value": "sat",
+          "label": {
+            "en": "Saturday",
+            "fr": "Samedi"
+          }
+        },
+        {
+          "value": "sun",
+          "label": {
+            "en": "Sunday",
+            "fr": "Dimanche"
+          }
+        }
+      ],
+      "required": false
+    },
+    {
+      "key": "settings_section",
+      "type": "section",
+      "label": {
+        "en": "Settings",
+        "fr": "Réglages"
+      },
+      "description": {
+        "en": "With a travel window, a trip costs about 250 requests a day with the default values; without one, about 800. Three trips and an open departures board stay within the 5 000 a day.",
+        "fr": "Avec une plage horaire, un trajet coûte environ 250 requêtes par jour avec les valeurs par défaut ; sans plage, environ 800. Trois trajets et un tableau des départs ouvert restent sous les 5 000 par jour."
+      }
+    },
+    {
+      "key": "train_count",
+      "type": "number",
+      "label": {
+        "en": "Trains followed per trip",
+        "fr": "Trains suivis par trajet"
+      },
+      "description": {
+        "en": "The next trains of each trip, between 1 and 8.",
+        "fr": "Les prochains trains de chaque trajet, entre 1 et 8."
+      },
+      "min": 1,
+      "max": 8,
+      "default": 4,
+      "required": false
+    },
+    {
+      "key": "delay_threshold",
+      "type": "number",
+      "label": {
+        "en": "Delay threshold (min)",
+        "fr": "Seuil de retard (min)"
+      },
+      "description": {
+        "en": "From how many minutes a train counts as delayed (scenes, disrupted trains, colors).",
+        "fr": "À partir de combien de minutes un train compte comme en retard (scènes, trains perturbés, couleurs)."
+      },
+      "min": 1,
+      "max": 30,
+      "default": 5,
+      "required": false
+    },
+    {
+      "key": "poll_interval",
+      "type": "number",
+      "label": {
+        "en": "Refresh around the window (min)",
+        "fr": "Rafraîchissement autour de la plage (min)"
+      },
+      "description": {
+        "en": "From an hour before the travel window to its end (all day without a window), between 2 and 30 minutes.",
+        "fr": "D’une heure avant la plage horaire jusqu’à sa fin (toute la journée sans plage), entre 2 et 30 minutes."
+      },
+      "min": 2,
+      "max": 30,
+      "default": 3,
+      "required": false
+    },
+    {
+      "key": "idle_interval",
+      "type": "number",
+      "label": {
+        "en": "Refresh the rest of the time (min)",
+        "fr": "Rafraîchissement le reste du temps (min)"
+      },
+      "description": {
+        "en": "Outside the window (and at night), between 10 and 180 minutes.",
+        "fr": "En dehors de la plage (et la nuit), entre 10 et 180 minutes."
+      },
+      "min": 10,
+      "max": 180,
+      "default": 30,
+      "required": false
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion"
+      },
+      "timeout_seconds": 60
+    },
+    {
+      "key": "search_station",
+      "label": {
+        "en": "Find a station",
+        "fr": "Chercher une gare"
+      },
+      "timeout_seconds": 20,
+      "fields": [
+        {
+          "key": "query",
+          "type": "string",
+          "label": {
+            "en": "Station name",
+            "fr": "Nom de la gare"
+          },
+          "placeholder": {
+            "en": "Lyon Part",
+            "fr": "Lyon Part"
+          },
+          "required": true
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "train_delayed",
+      "label": {
+        "en": "SNCF: train delayed",
+        "fr": "SNCF : train en retard"
+      },
+      "description": {
+        "en": "A followed train becomes late (from the delay threshold), or later still: 15 min, then 30 min.",
+        "fr": "Un train suivi prend du retard (à partir du seuil de retard), ou davantage : 15 min, puis 30 min."
+      },
+      "fields": [
+        {
+          "key": "trip",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          },
+          "description": {
+            "en": "One of the SNCF devices. Leave empty for any trip.",
+            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets."
+          },
+          "required": false
+        },
+        {
+          "key": "delay_level",
+          "type": "multi_select",
+          "label": {
+            "en": "Delay",
+            "fr": "Retard"
+          },
+          "description": {
+            "en": "Leave empty for any delay.",
+            "fr": "Laissez vide pour tous les retards."
+          },
+          "options": [
+            {
+              "value": "minor",
+              "label": {
+                "en": "Under 15 min",
+                "fr": "Moins de 15 min"
+              }
+            },
+            {
+              "value": "major",
+              "label": {
+                "en": "15 to 29 min",
+                "fr": "15 à 29 min"
+              }
+            },
+            {
+              "value": "severe",
+              "label": {
+                "en": "30 min and more",
+                "fr": "30 min et plus"
+              }
+            }
+          ],
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "trip_name",
+          "type": "string",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          }
+        },
+        {
+          "key": "train_number",
+          "type": "string",
+          "label": {
+            "en": "Train number",
+            "fr": "Numéro du train"
+          }
+        },
+        {
+          "key": "train_mode",
+          "type": "string",
+          "label": {
+            "en": "Train type (TER, TGV INOUI…)",
+            "fr": "Type de train (TER, TGV INOUI…)"
+          }
+        },
+        {
+          "key": "direction",
+          "type": "string",
+          "label": {
+            "en": "Direction",
+            "fr": "Direction"
+          }
+        },
+        {
+          "key": "departure_date",
+          "type": "string",
+          "label": {
+            "en": "Departure date (YYYY-MM-DD)",
+            "fr": "Date de départ (AAAA-MM-JJ)"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_arrival",
+          "type": "string",
+          "label": {
+            "en": "Expected arrival (HH:MM)",
+            "fr": "Arrivée estimée (HH:MM)"
+          }
+        },
+        {
+          "key": "delay_minutes",
+          "type": "number",
+          "label": {
+            "en": "Delay (min)",
+            "fr": "Retard (min)"
+          }
+        },
+        {
+          "key": "cause",
+          "type": "string",
+          "label": {
+            "en": "Cause",
+            "fr": "Motif"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    },
+    {
+      "key": "train_cancelled",
+      "label": {
+        "en": "SNCF: train cancelled",
+        "fr": "SNCF : train supprimé"
+      },
+      "description": {
+        "en": "A followed train is cancelled, or no longer stops at a station of the trip.",
+        "fr": "Un train suivi est supprimé, ou ne dessert plus une gare du trajet."
+      },
+      "fields": [
+        {
+          "key": "trip",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          },
+          "description": {
+            "en": "One of the SNCF devices. Leave empty for any trip.",
+            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets."
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "trip_name",
+          "type": "string",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          }
+        },
+        {
+          "key": "train_number",
+          "type": "string",
+          "label": {
+            "en": "Train number",
+            "fr": "Numéro du train"
+          }
+        },
+        {
+          "key": "train_mode",
+          "type": "string",
+          "label": {
+            "en": "Train type (TER, TGV INOUI…)",
+            "fr": "Type de train (TER, TGV INOUI…)"
+          }
+        },
+        {
+          "key": "direction",
+          "type": "string",
+          "label": {
+            "en": "Direction",
+            "fr": "Direction"
+          }
+        },
+        {
+          "key": "departure_date",
+          "type": "string",
+          "label": {
+            "en": "Departure date (YYYY-MM-DD)",
+            "fr": "Date de départ (AAAA-MM-JJ)"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_arrival",
+          "type": "string",
+          "label": {
+            "en": "Expected arrival (HH:MM)",
+            "fr": "Arrivée estimée (HH:MM)"
+          }
+        },
+        {
+          "key": "cause",
+          "type": "string",
+          "label": {
+            "en": "Cause",
+            "fr": "Motif"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    },
+    {
+      "key": "departure_soon",
+      "label": {
+        "en": "SNCF: train leaving soon",
+        "fr": "SNCF : départ imminent"
+      },
+      "description": {
+        "en": "A followed train leaves in N minutes, counted on its real-time departure (delays included).",
+        "fr": "Un train suivi part dans N minutes, comptées sur son départ en temps réel (retards compris)."
+      },
+      "fields": [
+        {
+          "key": "trip",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          },
+          "description": {
+            "en": "One of the SNCF devices. Leave empty for any trip.",
+            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets."
+          },
+          "required": false
+        },
+        {
+          "key": "minutes",
+          "type": "select",
+          "label": {
+            "en": "Leaves in",
+            "fr": "Départ dans"
+          },
+          "options": [
+            {
+              "value": "5",
+              "label": {
+                "en": "5 min",
+                "fr": "5 min"
+              }
+            },
+            {
+              "value": "10",
+              "label": {
+                "en": "10 min",
+                "fr": "10 min"
+              }
+            },
+            {
+              "value": "15",
+              "label": {
+                "en": "15 min",
+                "fr": "15 min"
+              }
+            },
+            {
+              "value": "20",
+              "label": {
+                "en": "20 min",
+                "fr": "20 min"
+              }
+            },
+            {
+              "value": "30",
+              "label": {
+                "en": "30 min",
+                "fr": "30 min"
+              }
+            },
+            {
+              "value": "45",
+              "label": {
+                "en": "45 min",
+                "fr": "45 min"
+              }
+            },
+            {
+              "value": "60",
+              "label": {
+                "en": "60 min",
+                "fr": "60 min"
+              }
+            }
+          ],
+          "required": true
+        }
+      ],
+      "variables": [
+        {
+          "key": "trip_name",
+          "type": "string",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          }
+        },
+        {
+          "key": "train_number",
+          "type": "string",
+          "label": {
+            "en": "Train number",
+            "fr": "Numéro du train"
+          }
+        },
+        {
+          "key": "train_mode",
+          "type": "string",
+          "label": {
+            "en": "Train type (TER, TGV INOUI…)",
+            "fr": "Type de train (TER, TGV INOUI…)"
+          }
+        },
+        {
+          "key": "direction",
+          "type": "string",
+          "label": {
+            "en": "Direction",
+            "fr": "Direction"
+          }
+        },
+        {
+          "key": "departure_date",
+          "type": "string",
+          "label": {
+            "en": "Departure date (YYYY-MM-DD)",
+            "fr": "Date de départ (AAAA-MM-JJ)"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_arrival",
+          "type": "string",
+          "label": {
+            "en": "Expected arrival (HH:MM)",
+            "fr": "Arrivée estimée (HH:MM)"
+          }
+        },
+        {
+          "key": "delay_minutes",
+          "type": "number",
+          "label": {
+            "en": "Delay (min)",
+            "fr": "Retard (min)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "get_next_trains",
+      "label": {
+        "en": "SNCF: next trains",
+        "fr": "SNCF : prochains trains"
+      },
+      "description": {
+        "en": "The next train of a trip, its delay or cancellation, and a sentence for a message.",
+        "fr": "Le prochain train d’un trajet, son retard ou sa suppression, et une phrase pour un message."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "trip",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          },
+          "description": {
+            "en": "One of the SNCF devices. Leave empty for the first trip.",
+            "fr": "Un des appareils SNCF. Laissez vide pour le premier trajet."
+          },
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "key": "trip_name",
+          "type": "string",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          }
+        },
+        {
+          "key": "found",
+          "type": "boolean",
+          "label": {
+            "en": "Train found",
+            "fr": "Train trouvé"
+          }
+        },
+        {
+          "key": "train_number",
+          "type": "string",
+          "label": {
+            "en": "Train number",
+            "fr": "Numéro du train"
+          }
+        },
+        {
+          "key": "train_mode",
+          "type": "string",
+          "label": {
+            "en": "Train type",
+            "fr": "Type de train"
+          }
+        },
+        {
+          "key": "scheduled_departure",
+          "type": "string",
+          "label": {
+            "en": "Scheduled departure (HH:MM)",
+            "fr": "Départ prévu (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_departure",
+          "type": "string",
+          "label": {
+            "en": "Expected departure (HH:MM)",
+            "fr": "Départ estimé (HH:MM)"
+          }
+        },
+        {
+          "key": "expected_arrival",
+          "type": "string",
+          "label": {
+            "en": "Expected arrival (HH:MM)",
+            "fr": "Arrivée estimée (HH:MM)"
+          }
+        },
+        {
+          "key": "delay_minutes",
+          "type": "number",
+          "label": {
+            "en": "Delay (min)",
+            "fr": "Retard (min)"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "Status (on_time, delayed, cancelled)",
+            "fr": "État (on_time, delayed, cancelled)"
+          }
+        },
+        {
+          "key": "cancelled",
+          "type": "boolean",
+          "label": {
+            "en": "Cancelled",
+            "fr": "Supprimé"
+          }
+        },
+        {
+          "key": "minutes_until_departure",
+          "type": "number",
+          "label": {
+            "en": "Minutes until departure",
+            "fr": "Minutes avant le départ"
+          }
+        },
+        {
+          "key": "disrupted_count",
+          "type": "number",
+          "label": {
+            "en": "Disrupted trains",
+            "fr": "Trains perturbés"
+          }
+        },
+        {
+          "key": "cause",
+          "type": "string",
+          "label": {
+            "en": "Cause",
+            "fr": "Motif"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé"
+          },
+          "description": {
+            "en": "A sentence ready to put in a message.",
+            "fr": "Une phrase prête à mettre dans un message."
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "trip",
+      "label": {
+        "en": "SNCF trip",
+        "fr": "Trajet SNCF"
+      },
+      "description": {
+        "en": "The next trains of a trip, with their delays and cancellations.",
+        "fr": "Les prochains trains d’un trajet, avec retards et suppressions."
+      },
+      "icon": "navigation",
+      "settings": [
+        {
+          "key": "trip",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          },
+          "description": {
+            "en": "One of the SNCF devices. Leave empty for the first trip.",
+            "fr": "Un des appareils SNCF. Laissez vide pour le premier trajet."
+          },
+          "required": false
+        }
+      ]
+    },
+    {
+      "key": "board",
+      "label": {
+        "en": "SNCF departures",
+        "fr": "Départs SNCF"
+      },
+      "description": {
+        "en": "The departures board of a station, every direction.",
+        "fr": "Le tableau des départs d’une gare, toutes directions."
+      },
+      "icon": "list",
+      "settings": [
+        {
+          "key": "station",
+          "type": "string",
+          "label": {
+            "en": "Station",
+            "fr": "Gare"
+          },
+          "description": {
+            "en": "A name, a UIC code or an identifier. Empty: the departure station of the trip below.",
+            "fr": "Un nom, un code UIC ou un identifiant. Vide : la gare de départ du trajet ci-dessous."
+          },
+          "placeholder": {
+            "en": "Rennes",
+            "fr": "Rennes"
+          },
+          "required": false
+        },
+        {
+          "key": "trip",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Trip",
+            "fr": "Trajet"
+          },
+          "description": {
+            "en": "Used when no station is typed. Empty: the first trip.",
+            "fr": "Utilisé si aucune gare n’est saisie. Vide : le premier trajet."
+          },
+          "required": false
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": {
+            "en": "Departures shown",
+            "fr": "Départs affichés"
+          },
+          "min": 1,
+          "max": 8,
+          "default": 6,
+          "required": false
+        }
+      ]
+    }
+  ]
+}
