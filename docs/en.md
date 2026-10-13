@@ -27,6 +27,7 @@ The free key allows **5 000 requests a day**. The integration counts them itself
 | **Trains followed** | how many next trains per trip (4 by default)                                          |
 | **Delay threshold** | from how many minutes a train counts as "delayed" (5 by default)                      |
 | **Refresh**         | every 3 minutes around the window, every 30 minutes the rest of the time (by default) |
+| **Language**        | of the device names and scene texts (automatic: the language of your dashboard)       |
 
 For a station, type:
 
@@ -53,6 +54,8 @@ In the **Discovery** tab, each trip shows up as a device "SNCF – _from_ → _t
 | **Next train**              | text, e.g. "07:42 · TER 858311 · +5 min" or "… · cancelled"         |
 | **Delay of the next train** | in minutes, the one of the next train that runs (0 when on time)    |
 | **Disrupted trains**        | how many followed trains are late (from the threshold) or cancelled |
+
+On the **Devices** screen, the badge of each trip says **cloud** while the SNCF API answers, **unreachable** when its last read failed, and turns orange when the reads are paused by the daily quota.
 
 ## Scenes
 
@@ -94,3 +97,4 @@ Every trigger provides variables: trip, train number and type, direction, date, 
 | "Station not found: …"                  | use the **Find a station** button and copy the identifier it gives                               |
 | "Daily quota of the SNCF API reached"   | the SNCF blocked the key until the time shown: fewer trips without a window, or longer intervals |
 | "No train found in the followed period" | no direct train in the travel window: check the stations and the window, or empty it             |
+| Device names or summaries in English    | set **Language of the texts** in the settings, or open an SNCF widget once                       |

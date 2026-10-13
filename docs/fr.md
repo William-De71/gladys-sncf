@@ -18,15 +18,16 @@ La clé gratuite autorise **5 000 requêtes par jour**. L'intégration les compt
 
 ### 2. Renseigner l'intégration
 
-| Champ                 | Rôle                                                                                          |
-| --------------------- | --------------------------------------------------------------------------------------------- |
-| **Clé d'API**         | obligatoire                                                                                   |
-| **Trajet 1, 2, 3**    | gare de départ et gare d'arrivée (seuls les **trains directs** sont suivis)                   |
-| **Plage horaire**     | optionnelle, par exemple `07:00-09:30` : les trains partant dans cette plage                  |
-| **Jours de trajet**   | optionnels, par exemple du lundi au vendredi (vide : tous les jours)                          |
-| **Trains suivis**     | combien de prochains trains par trajet (4 par défaut)                                         |
-| **Seuil de retard**   | à partir de combien de minutes un train compte comme « en retard » (5 par défaut)             |
-| **Rafraîchissements** | toutes les 3 minutes autour de la plage, toutes les 30 minutes le reste du temps (par défaut) |
+| Champ                 | Rôle                                                                                           |
+| --------------------- | ---------------------------------------------------------------------------------------------- |
+| **Clé d'API**         | obligatoire                                                                                    |
+| **Trajet 1, 2, 3**    | gare de départ et gare d'arrivée (seuls les **trains directs** sont suivis)                    |
+| **Plage horaire**     | optionnelle, par exemple `07:00-09:30` : les trains partant dans cette plage                   |
+| **Jours de trajet**   | optionnels, par exemple du lundi au vendredi (vide : tous les jours)                           |
+| **Trains suivis**     | combien de prochains trains par trajet (4 par défaut)                                          |
+| **Seuil de retard**   | à partir de combien de minutes un train compte comme « en retard » (5 par défaut)              |
+| **Rafraîchissements** | toutes les 3 minutes autour de la plage, toutes les 30 minutes le reste du temps (par défaut)  |
+| **Langue**            | des noms d'appareils et des textes de scène (automatique : la langue de votre tableau de bord) |
 
 Pour une gare, vous pouvez saisir :
 
@@ -55,6 +56,8 @@ Dans l'onglet **Découverte**, chaque trajet apparaît comme un appareil « SNCF
 | **Trains perturbés**         | combien de trains suivis sont en retard (au-delà du seuil) ou supprimés |
 
 Exemples de scènes sur ces valeurs : « si le retard du prochain train dépasse 10 minutes, allumer la lampe du couloir en orange », « si des trains sont perturbés, l'annoncer sur l'enceinte ».
+
+Dans l'écran **Appareils**, le badge de chaque trajet indique **cloud** tant que l'API SNCF répond, **injoignable** quand sa dernière lecture a échoué, et passe à l'orange quand les lectures sont en pause à cause du quota quotidien.
 
 ## Scènes
 
@@ -104,3 +107,4 @@ Exemple : chaque matin de semaine à 7 h, « SNCF : prochains trains », puis en
 | « Gare introuvable : … »                     | utilisez le bouton **Chercher une gare** et copiez l'identifiant proposé                                                         |
 | « Quota quotidien de l'API SNCF atteint »    | la SNCF a bloqué la clé jusqu'à l'heure indiquée : réduisez le nombre de trajets sans plage horaire ou augmentez les intervalles |
 | « Aucun train trouvé sur la période suivie » | pas de train direct dans la plage horaire : vérifiez les gares et la plage, ou videz-la                                          |
+| Noms d'appareils ou résumés en anglais       | réglez **Langue des textes** dans les réglages, ou ouvrez une fois un widget SNCF                                                |

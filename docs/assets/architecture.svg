@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" width="880" height="360" font-family="Helvetica, Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">Architecture of the SNCF integration</title>
+  <desc id="desc">Diagram: the SNCF API is read on a timer per trip by the integration container, which publishes devices, states, transport badges, scene events and widget contents to Gladys over its host API and WebSocket.</desc>
+  <style>
+    .box { fill: #ffffff; stroke: #4a5568; stroke-width: 1.5; }
+    .inner { fill: #f7fafc; stroke: #a0aec0; stroke-width: 1; }
+    .sncf { fill: #f3ecf7; stroke: #82368c; stroke-width: 1.5; }
+    .gladys { fill: #ebf4ff; stroke: #3b82f6; stroke-width: 1.5; }
+    .h { font-size: 15px; font-weight: bold; fill: #1a202c; }
+    .t { font-size: 12px; fill: #2d3748; }
+    .s { font-size: 11px; fill: #4a5568; }
+    .arrow { stroke: #4a5568; stroke-width: 1.5; fill: none; marker-end: url(#a); }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5568"/>
+    </marker>
+  </defs>
+  <rect width="880" height="360" fill="#ffffff"/>
+
+  <rect class="sncf" x="20" y="110" width="170" height="130" rx="10"/>
+  <text class="h" x="105" y="140" text-anchor="middle">SNCF API</text>
+  <text class="t" x="105" y="165" text-anchor="middle">journeys (real time</text>
+  <text class="t" x="105" y="183" text-anchor="middle">+ timetable)</text>
+  <text class="t" x="105" y="201" text-anchor="middle">departures, places</text>
+  <text class="s" x="105" y="225" text-anchor="middle">5 000 requests / day</text>
+
+  <rect class="box" x="250" y="30" width="360" height="300" rx="10"/>
+  <text class="h" x="430" y="56" text-anchor="middle">Integration container (Docker)</text>
+  <rect class="inner" x="270" y="72" width="150" height="56" rx="6"/>
+  <text class="t" x="345" y="96" text-anchor="middle">watcher + schedule</text>
+  <text class="s" x="345" y="114" text-anchor="middle">a timer per trip, quota</text>
+  <rect class="inner" x="440" y="72" width="150" height="56" rx="6"/>
+  <text class="t" x="515" y="96" text-anchor="middle">tracker</text>
+  <text class="s" x="515" y="114" text-anchor="middle">delays, cancellations</text>
+  <rect class="inner" x="270" y="146" width="150" height="56" rx="6"/>
+  <text class="t" x="345" y="170" text-anchor="middle">devices</text>
+  <text class="s" x="345" y="188" text-anchor="middle">one per trip, transport</text>
+  <rect class="inner" x="440" y="146" width="150" height="56" rx="6"/>
+  <text class="t" x="515" y="170" text-anchor="middle">widgets</text>
+  <text class="s" x="515" y="188" text-anchor="middle">trip, departures board</text>
+  <rect class="inner" x="270" y="220" width="150" height="56" rx="6"/>
+  <text class="t" x="345" y="244" text-anchor="middle">scene action</text>
+  <text class="s" x="345" y="262" text-anchor="middle">next trains</text>
+  <rect class="inner" x="440" y="220" width="150" height="56" rx="6"/>
+  <text class="t" x="515" y="244" text-anchor="middle">stations</text>
+  <text class="s" x="515" y="262" text-anchor="middle">name, UIC code, id</text>
+  <text class="s" x="430" y="312" text-anchor="middle">@gladysassistant/integration-sdk · /data only · non-root</text>
+
+  <rect class="gladys" x="670" y="80" width="190" height="190" rx="10"/>
+  <text class="h" x="765" y="110" text-anchor="middle">Gladys</text>
+  <text class="t" x="765" y="138" text-anchor="middle">Discover → devices</text>
+  <text class="t" x="765" y="160" text-anchor="middle">states and history</text>
+  <text class="t" x="765" y="182" text-anchor="middle">scene triggers</text>
+  <text class="t" x="765" y="204" text-anchor="middle">scene action</text>
+  <text class="t" x="765" y="226" text-anchor="middle">dashboard widgets</text>
+  <text class="s" x="765" y="252" text-anchor="middle">host API + WebSocket</text>
+
+  <path class="arrow" d="M190,150 L262,110"/>
+  <text class="s" x="105" y="98" text-anchor="middle">HTTPS, polled</text>
+  <path class="arrow" d="M262,248 L190,212"/>
+  <path class="arrow" d="M610,150 L662,150"/>
+  <path class="arrow" d="M662,200 L610,200"/>
+  <text class="s" x="616" y="140">publish</text>
+  <text class="s" x="616" y="222">requests</text>
+</svg>

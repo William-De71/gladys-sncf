@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { validateWidgetContent } from '@gladysassistant/integration-sdk';
 
 import { LANGUAGES, TEXTS, all, t } from '../src/i18n.js';
@@ -165,4 +165,33 @@ test('device names, dates and scene texts follow the language', () => {
   assert.match(data.summary, /está cancelado/);
   // Unknown language: English.
   assert.equal(t('featureNext', 'it'), 'Next train');
+});
+
+test('docs: English and French mandatory, the four languages with the same structure', () => {
+  const headings = (text) => text.split('\n').filter((line) => /^#{1,3} /.test(line)).length;
+  const tables = (text) => text.split('\n').filter((line) => /^\|\s*-/.test(line)).length;
+  const docs = Object.fromEntries(
+    LANGUAGES.map((language) => {
+      const path = new URL(`../docs/${language}.md`, import.meta.url);
+      assert.ok(existsSync(path), `docs/${language}.md is missing`);
+      return [language, readFileSync(path, 'utf8')];
+    }),
+  );
+  for (const language of LANGUAGES) {
+    assert.ok(docs[language].length > 300, `docs/${language}.md is too short`);
+    assert.equal(headings(docs[language]), headings(docs.en), `docs/${language}.md headings`);
+    assert.equal(tables(docs[language]), tables(docs.en), `docs/${language}.md tables`);
+  }
+});
+
+test('README: one per language, each linking to the three others', () => {
+  const files = { en: 'README.md', fr: 'README.fr.md', de: 'README.de.md', es: 'README.es.md' };
+  for (const file of Object.values(files)) {
+    const path = new URL(`../${file}`, import.meta.url);
+    assert.ok(existsSync(path), `${file} is missing`);
+    const text = readFileSync(path, 'utf8');
+    for (const other of Object.values(files).filter((name) => name !== file)) {
+      assert.ok(text.includes(`](${other})`), `${file} does not link to ${other}`);
+    }
+  }
 });
