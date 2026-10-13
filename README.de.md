@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-sncf/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-sncf/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![SNCF für Gladys Assistant](cover.jpg)
+
 Externe [Gladys Assistant](https://gladysassistant.com)-Integration für **SNCF-Züge**: die nächsten Züge deiner
 Strecken in Echtzeit — Verspätungen, Ausfälle, Gründe — als Geräte, **Szenen-Auslöser**, eine **Szenenaktion**
 und **Dashboard-Widgets**, gebaut auf `@gladysassistant/integration-sdk` 0.15.
@@ -79,6 +81,8 @@ Verspätung, Abfahrt um 07:47. Danach: 08:12 pünktlich.“).
 Beispiel: an jedem Werktag um 07:00 → **SNCF: nächste Züge** → die Ausgabe `summary` per Telegram senden.
 
 ### Dashboard-Widgets
+
+![Das Widget „SNCF-Strecke“ (die nächsten Züge von Rennes nach Nantes, einer fällt aus, einer verspätet) neben dem Widget „SNCF-Abfahrten“ (die Abfahrtstafel von Rennes) — generierte Illustration, kein Screenshot](docs/assets/widgets.de.png)
 
 | Widget  | Inhalt                                                                                                                                                        |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -220,6 +224,8 @@ Node 22 oder neuer. Die Tests (`node --test`) greifen nie aufs Netzwerk zu: Sie 
 - `test/i18n.test.js` prüft die vier Sprachen (Manifest, Laufzeittexte, Dokumentation, READMEs) und validiert die
   Widget-Inhalte in jeder;
 - `test/release.test.js` deckt das Release-Skript ab (Version, Changelog, Bump).
+- `docs/illustrations/render.sh` erzeugt die Widget-Illustrationen in `docs/assets` aus dem Widget-Code neu
+  (Headless-Chrome, Styles des Gladys-Frontends): nach jeder Änderung an einem Widget erneut ausführen.
 
 `gladys_version` ist `>=5.1.1` (Widgets, Szenen-Auslöser und -Aktionen, `source: "devices"`).
 

@@ -87,6 +87,8 @@ Ejemplo: cada mañana laborable a las 7, «SNCF: próximos trenes» y luego envi
 
 ## Widgets
 
+![El widget «Trayecto SNCF» (los próximos trenes de Rennes a Nantes, uno cancelado y otro con retraso) junto al widget «Salidas SNCF» (el panel de salidas de Rennes) — ilustración generada, no una captura de pantalla](https://raw.githubusercontent.com/William-De71/gladys-sncf/main/docs/assets/widgets.es.png)
+
 | Widget            | Contenido                                                                                                                                                               |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Trayecto SNCF** | la hora de la próxima salida y el tiempo que falta, y después cada tren con una insignia puntual / +N min / cancelado; toca un tren con incidencias para leer el motivo |

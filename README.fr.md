@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-sncf/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-sncf/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![SNCF pour Gladys Assistant](cover.jpg)
+
 Intégration externe [Gladys Assistant](https://gladysassistant.com) pour les **trains SNCF** : les prochains trains
 de vos trajets en temps réel — retards, suppressions, motifs — sous forme d'appareils, de **déclencheurs de
 scène**, d'une **action de scène** et de **widgets de tableau de bord**, avec `@gladysassistant/integration-sdk`
@@ -82,6 +84,8 @@ l'heure. »).
 Exemple : chaque matin de semaine à 7 h → **SNCF : prochains trains** → envoyer sa sortie `summary` sur Telegram.
 
 ### Widgets de tableau de bord
+
+![Le widget « Trajet SNCF » (les prochains trains de Rennes à Nantes, dont un supprimé et un en retard) à côté du widget « Départs SNCF » (le tableau des départs de Rennes) — illustration générée, pas une capture d’écran](docs/assets/widgets.fr.png)
 
 | Widget  | Contenu                                                                                                                                              |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -219,6 +223,8 @@ l'API gardées dans [`test/fixtures`](test/fixtures/README.md) et vérifient cha
 - `test/i18n.test.js` vérifie les quatre langues (manifeste, textes à l'exécution, docs, README) et valide les
   contenus de widget dans chacune ;
 - `test/release.test.js` couvre le script de release (version, changelog, bump).
+- `docs/illustrations/render.sh` régénère les illustrations des widgets de `docs/assets` à partir du code des
+  widgets (Chrome headless, styles du front Gladys) : relancez-le après tout changement d’un widget.
 
 `gladys_version` vaut `>=5.1.1` (widgets, déclencheurs et actions de scène, `source: "devices"`).
 

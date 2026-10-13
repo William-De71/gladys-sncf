@@ -44,6 +44,7 @@ src/store.js            JSON files under /data (quota, stations, fired events)
 gladys-assistant-integration.json   manifest
 docs/{en,fr,de,es}.md   user documentation, re-hosted by the store
 .github/scripts/release.mjs         version, changelog, bump (tested in test/)
+docs/illustrations/render.sh        regenerates the widget illustrations (docs/assets)
 ```
 
 ## Rules
@@ -72,5 +73,8 @@ docs/{en,fr,de,es}.md   user documentation, re-hosted by the store
   `description` holds 10 to 100 characters per language. A field older cores
   do not know needs a higher `gladys_version` minimum (see `src/constants.js`
   of the integration-store).
+- **Widget illustrations.** `docs/assets/widgets.<lang>.png` are generated
+  from the widget code by `docs/illustrations/render.sh`: run it again after
+  any change to a widget content, and keep them labelled as illustrations.
 - **Style.** Prettier formats, ESLint catches mistakes. Comments explain why,
   in English. Tests never touch the network.

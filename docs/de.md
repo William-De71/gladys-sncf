@@ -87,6 +87,8 @@ Beispiel: an jedem Werktag um 7 Uhr „SNCF: nächste Züge“, dann die `Zusamm
 
 ## Widgets
 
+![Das Widget „SNCF-Strecke“ (die nächsten Züge von Rennes nach Nantes, einer fällt aus, einer verspätet) neben dem Widget „SNCF-Abfahrten“ (die Abfahrtstafel von Rennes) — generierte Illustration, kein Screenshot](https://raw.githubusercontent.com/William-De71/gladys-sncf/main/docs/assets/widgets.de.png)
+
 | Widget             | Inhalt                                                                                                                                                                              |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **SNCF-Strecke**   | die Uhrzeit der nächsten Abfahrt und die verbleibende Zeit, dann jeder Zug mit einem Abzeichen pünktlich / +N min / fällt aus; tippe auf einen gestörten Zug, um den Grund zu lesen |

@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-sncf/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-sncf/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![SNCF for Gladys Assistant](cover.jpg)
+
 External [Gladys Assistant](https://gladysassistant.com) integration for **SNCF trains**: the next trains of your
 trips in real time — delays, cancellations, causes — as devices, **scene triggers**, a **scene action** and
 **dashboard widgets**, built on `@gladysassistant/integration-sdk` 0.15.
@@ -76,6 +78,8 @@ time.").
 Example: every weekday at 07:00 → **SNCF: next trains** → send its `summary` output on Telegram.
 
 ### Dashboard widgets
+
+![The "SNCF trip" widget (the next trains from Rennes to Nantes, one cancelled, one late) next to the "SNCF departures" widget (the departures board of Rennes) — generated illustration, not a screenshot](docs/assets/widgets.en.png)
 
 | Widget  | Content                                                                                                                                      |
 | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -210,6 +214,8 @@ Beyond the unit tests:
 - `test/i18n.test.js` checks the four languages (manifest, runtime texts, docs, READMEs) and validates the widget
   contents in each;
 - `test/release.test.js` covers the release script (version, changelog, bump).
+- `docs/illustrations/render.sh` regenerates the widget illustrations of `docs/assets` from the widget code
+  (headless Chrome, the Gladys front styles): run it after any change to a widget.
 
 `gladys_version` is `>=5.1.1` (widgets, scene triggers and actions, `source: "devices"`).
 

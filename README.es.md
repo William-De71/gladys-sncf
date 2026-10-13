@@ -7,6 +7,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-sncf/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-sncf/actions/workflows/release.yml)
 [![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
 
+![SNCF para Gladys Assistant](cover.jpg)
+
 Integración externa de [Gladys Assistant](https://gladysassistant.com) para los **trenes SNCF**: los próximos
 trenes de tus trayectos en tiempo real — retrasos, cancelaciones, motivos — como dispositivos, **disparadores de
 escena**, una **acción de escena** y **widgets del panel**, construida sobre `@gladysassistant/integration-sdk`
@@ -82,6 +84,8 @@ motivo y una frase `summary` («Rennes → Nantes: el TER 858311 de las 07:42 ll
 Ejemplo: cada día laborable a las 07:00 → **SNCF: próximos trenes** → enviar su salida `summary` por Telegram.
 
 ### Widgets del panel
+
+![El widget «Trayecto SNCF» (los próximos trenes de Rennes a Nantes, uno cancelado y otro con retraso) junto al widget «Salidas SNCF» (el panel de salidas de Rennes) — ilustración generada, no una captura de pantalla](docs/assets/widgets.es.png)
 
 | Widget  | Contenido                                                                                                                                                         |
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -221,6 +225,8 @@ guardadas en [`test/fixtures`](test/fixtures/README.md) y comprueban cada conten
 - `test/i18n.test.js` comprueba los cuatro idiomas (manifiesto, textos en ejecución, documentación, README) y
   valida los contenidos de widget en cada uno;
 - `test/release.test.js` cubre el script de release (versión, changelog, bump).
+- `docs/illustrations/render.sh` regenera las ilustraciones de los widgets de `docs/assets` a partir del código de
+  los widgets (Chrome headless, estilos del front de Gladys): vuelve a ejecutarlo tras cualquier cambio de un widget.
 
 `gladys_version` es `>=5.1.1` (widgets, disparadores y acciones de escena, `source: "devices"`).
 

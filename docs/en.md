@@ -77,6 +77,8 @@ Every trigger provides variables: trip, train number and type, direction, date, 
 
 ## Widgets
 
+![The "SNCF trip" widget (the next trains from Rennes to Nantes, one cancelled, one late) next to the "SNCF departures" widget (the departures board of Rennes) — generated illustration, not a screenshot](https://raw.githubusercontent.com/William-De71/gladys-sncf/main/docs/assets/widgets.en.png)
+
 | Widget              | Content                                                                                                                                        |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | **SNCF trip**       | the next departure time and the time left, then each train with an on time / +N min / cancelled badge; tap a disrupted train to read the cause |

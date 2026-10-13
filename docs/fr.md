@@ -87,6 +87,8 @@ Exemple : chaque matin de semaine à 7 h, « SNCF : prochains trains », puis en
 
 ## Widgets
 
+![Le widget « Trajet SNCF » (les prochains trains de Rennes à Nantes, dont un supprimé et un en retard) à côté du widget « Départs SNCF » (le tableau des départs de Rennes) — illustration générée, pas une capture d’écran](https://raw.githubusercontent.com/William-De71/gladys-sncf/main/docs/assets/widgets.fr.png)
+
 | Widget           | Contenu                                                                                                                                                      |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Trajet SNCF**  | l'heure du prochain départ et le temps restant, puis chaque train avec un badge à l'heure / +N min / supprimé ; touchez un train perturbé pour lire le motif |
