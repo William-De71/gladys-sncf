@@ -1,0 +1,361 @@
+{
+  "device": {
+    "external_id": "ext:sncf:trip:87471003-87481002",
+    "should_poll": false,
+    "params": ["SNCF_FROM", "SNCF_TO"],
+    "features": [
+      {
+        "external_id": "ext:sncf:trip:87471003-87481002:next",
+        "category": "text",
+        "type": "text",
+        "min": 0,
+        "max": 0,
+        "read_only": true,
+        "has_feedback": false
+      },
+      {
+        "external_id": "ext:sncf:trip:87471003-87481002:delay",
+        "category": "duration",
+        "type": "integer",
+        "unit": "minutes",
+        "min": 0,
+        "max": 1440,
+        "read_only": true,
+        "has_feedback": false
+      },
+      {
+        "external_id": "ext:sncf:trip:87471003-87481002:disrupted",
+        "category": "counter-sensor",
+        "type": "integer",
+        "min": 0,
+        "max": 20,
+        "read_only": true,
+        "has_feedback": false
+      }
+    ]
+  },
+  "manifest": {
+    "config_schema": [
+      {
+        "key": "intro",
+        "type": "section"
+      },
+      {
+        "key": "api_key",
+        "type": "secret"
+      },
+      {
+        "key": "trip_1_section",
+        "type": "section"
+      },
+      {
+        "key": "trip_1_from",
+        "type": "string"
+      },
+      {
+        "key": "trip_1_to",
+        "type": "string"
+      },
+      {
+        "key": "trip_1_hours",
+        "type": "string"
+      },
+      {
+        "key": "trip_1_days",
+        "type": "multi_select",
+        "options": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+      },
+      {
+        "key": "trip_2_section",
+        "type": "section"
+      },
+      {
+        "key": "trip_2_from",
+        "type": "string"
+      },
+      {
+        "key": "trip_2_to",
+        "type": "string"
+      },
+      {
+        "key": "trip_2_hours",
+        "type": "string"
+      },
+      {
+        "key": "trip_2_days",
+        "type": "multi_select",
+        "options": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+      },
+      {
+        "key": "trip_3_section",
+        "type": "section"
+      },
+      {
+        "key": "trip_3_from",
+        "type": "string"
+      },
+      {
+        "key": "trip_3_to",
+        "type": "string"
+      },
+      {
+        "key": "trip_3_hours",
+        "type": "string"
+      },
+      {
+        "key": "trip_3_days",
+        "type": "multi_select",
+        "options": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+      },
+      {
+        "key": "settings_section",
+        "type": "section"
+      },
+      {
+        "key": "train_count",
+        "type": "number"
+      },
+      {
+        "key": "delay_threshold",
+        "type": "number"
+      },
+      {
+        "key": "poll_interval",
+        "type": "number"
+      },
+      {
+        "key": "idle_interval",
+        "type": "number"
+      }
+    ],
+    "actions": ["test_connection", "search_station"],
+    "scene_triggers": [
+      {
+        "key": "train_delayed",
+        "fields": ["trip", "delay_level"],
+        "options": {
+          "delay_level": ["minor", "major", "severe"]
+        },
+        "variables": [
+          {
+            "key": "trip_name",
+            "type": "string"
+          },
+          {
+            "key": "train_number",
+            "type": "string"
+          },
+          {
+            "key": "train_mode",
+            "type": "string"
+          },
+          {
+            "key": "direction",
+            "type": "string"
+          },
+          {
+            "key": "departure_date",
+            "type": "string"
+          },
+          {
+            "key": "scheduled_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_arrival",
+            "type": "string"
+          },
+          {
+            "key": "delay_minutes",
+            "type": "number"
+          },
+          {
+            "key": "cause",
+            "type": "string"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "train_cancelled",
+        "fields": ["trip"],
+        "options": {},
+        "variables": [
+          {
+            "key": "trip_name",
+            "type": "string"
+          },
+          {
+            "key": "train_number",
+            "type": "string"
+          },
+          {
+            "key": "train_mode",
+            "type": "string"
+          },
+          {
+            "key": "direction",
+            "type": "string"
+          },
+          {
+            "key": "departure_date",
+            "type": "string"
+          },
+          {
+            "key": "scheduled_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_arrival",
+            "type": "string"
+          },
+          {
+            "key": "cause",
+            "type": "string"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "departure_soon",
+        "fields": ["trip", "minutes"],
+        "options": {
+          "minutes": ["5", "10", "15", "20", "30", "45", "60"]
+        },
+        "variables": [
+          {
+            "key": "trip_name",
+            "type": "string"
+          },
+          {
+            "key": "train_number",
+            "type": "string"
+          },
+          {
+            "key": "train_mode",
+            "type": "string"
+          },
+          {
+            "key": "direction",
+            "type": "string"
+          },
+          {
+            "key": "departure_date",
+            "type": "string"
+          },
+          {
+            "key": "scheduled_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_arrival",
+            "type": "string"
+          },
+          {
+            "key": "delay_minutes",
+            "type": "number"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "scene_actions": [
+      {
+        "key": "get_next_trains",
+        "fields": ["trip"],
+        "options": {},
+        "outputs": [
+          {
+            "key": "trip_name",
+            "type": "string"
+          },
+          {
+            "key": "found",
+            "type": "boolean"
+          },
+          {
+            "key": "train_number",
+            "type": "string"
+          },
+          {
+            "key": "train_mode",
+            "type": "string"
+          },
+          {
+            "key": "scheduled_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_departure",
+            "type": "string"
+          },
+          {
+            "key": "expected_arrival",
+            "type": "string"
+          },
+          {
+            "key": "delay_minutes",
+            "type": "number"
+          },
+          {
+            "key": "status",
+            "type": "string"
+          },
+          {
+            "key": "cancelled",
+            "type": "boolean"
+          },
+          {
+            "key": "minutes_until_departure",
+            "type": "number"
+          },
+          {
+            "key": "disrupted_count",
+            "type": "number"
+          },
+          {
+            "key": "cause",
+            "type": "string"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "widgets": [
+      {
+        "key": "trip",
+        "settings": ["trip"],
+        "options": {}
+      },
+      {
+        "key": "board",
+        "settings": ["station", "trip", "count"],
+        "options": {}
+      }
+    ]
+  }
+}
