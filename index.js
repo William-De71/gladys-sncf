@@ -508,9 +508,13 @@ gladys.onDeviceCreated(async (device) => {
   const trip = tripFromExternalId(device.external_id, trips);
   const snapshot = trip ? watcher.peek(trip.key) : null;
   if (snapshot) {
+    // States sent before the device existed were dropped by Gladys: send
+    // them again now, and refresh the widgets that pick this trip.
     await publishStates(trip, snapshot).catch((err) =>
       logger.warn(`Unable to publish the states of ${trip.name}: ${err.message}`),
     );
+    gladys.requestWidgetRefresh(WIDGETS.TRIP);
+    gladys.requestWidgetRefresh(WIDGETS.BOARD);
   }
 });
 
