@@ -4,7 +4,9 @@
   "name": "SNCF",
   "description": {
     "en": "Your SNCF trains in real time: delays, cancellations, scenes, widgets.",
-    "fr": "Vos trains SNCF en temps réel : retards, suppressions, scènes, widgets."
+    "fr": "Vos trains SNCF en temps réel : retards, suppressions, scènes, widgets.",
+    "de": "Deine SNCF-Züge in Echtzeit: Verspätungen, Ausfälle, Szenen, Widgets.",
+    "es": "Tus trenes SNCF en tiempo real: retrasos, cancelaciones, escenas, widgets."
   },
   "version": "1.0.0",
   "docker_image": "ghcr.io/william-de71/gladys-sncf:1.0.0",
@@ -18,25 +20,33 @@
       "type": "section",
       "label": {
         "en": "SNCF API key",
-        "fr": "Clé d’API SNCF"
+        "fr": "Clé d’API SNCF",
+        "de": "SNCF-API-Schlüssel",
+        "es": "Clave de API de SNCF"
       },
       "description": {
         "en": "The trains come from the official SNCF API: TER, TGV INOUI, OUIGO, Intercités, Lyria, Eurostar… in real time (Transilien: timetable only, no delays). The key is free: fill in the form of the SNCF developer page, the key arrives by email. It allows 5 000 requests a day; the integration counts them and slows down before the limit.",
-        "fr": "Les trains viennent de l’API officielle de la SNCF : TER, TGV INOUI, OUIGO, Intercités, Lyria, Eurostar… en temps réel (Transilien : horaires théoriques seulement, sans retards). La clé est gratuite : remplissez le formulaire de la page développeur SNCF, la clé arrive par email. Elle autorise 5 000 requêtes par jour ; l’intégration les compte et ralentit avant la limite."
+        "fr": "Les trains viennent de l’API officielle de la SNCF : TER, TGV INOUI, OUIGO, Intercités, Lyria, Eurostar… en temps réel (Transilien : horaires théoriques seulement, sans retards). La clé est gratuite : remplissez le formulaire de la page développeur SNCF, la clé arrive par email. Elle autorise 5 000 requêtes par jour ; l’intégration les compte et ralentit avant la limite.",
+        "de": "Die Züge stammen aus der offiziellen SNCF-API: TER, TGV INOUI, OUIGO, Intercités, Lyria, Eurostar… in Echtzeit (Transilien: nur Fahrplan, ohne Verspätungen). Der Schlüssel ist kostenlos: Fülle das Formular auf der SNCF-Entwicklerseite aus, der Schlüssel kommt per E-Mail. Er erlaubt 5 000 Anfragen pro Tag; die Integration zählt sie und wird vor dem Limit langsamer.",
+        "es": "Los trenes proceden de la API oficial de SNCF: TER, TGV INOUI, OUIGO, Intercités, Lyria, Eurostar… en tiempo real (Transilien: solo horarios teóricos, sin retrasos). La clave es gratuita: rellena el formulario de la página para desarrolladores de SNCF y la clave llega por correo electrónico. Permite 5 000 peticiones al día; la integración las cuenta y reduce el ritmo antes del límite."
       },
       "links": [
         {
           "url": "https://numerique.sncf.com/startup/api/token-developpeur/",
           "label": {
             "en": "Get a free API key",
-            "fr": "Obtenir une clé gratuite"
+            "fr": "Obtenir une clé gratuite",
+            "de": "Kostenlosen Schlüssel anfordern",
+            "es": "Obtener una clave gratuita"
           }
         },
         {
           "url": "https://numerique.sncf.com/startup/api/",
           "label": {
             "en": "About the SNCF API",
-            "fr": "À propos de l’API SNCF"
+            "fr": "À propos de l’API SNCF",
+            "de": "Über die SNCF-API",
+            "es": "Acerca de la API de SNCF"
           }
         }
       ]
@@ -46,11 +56,15 @@
       "type": "secret",
       "label": {
         "en": "API key",
-        "fr": "Clé d’API"
+        "fr": "Clé d’API",
+        "de": "API-Schlüssel",
+        "es": "Clave de API"
       },
       "description": {
         "en": "The key received by email (a UUID, 36 characters).",
-        "fr": "La clé reçue par email (un UUID, 36 caractères)."
+        "fr": "La clé reçue par email (un UUID, 36 caractères).",
+        "de": "Der per E-Mail erhaltene Schlüssel (eine UUID, 36 Zeichen).",
+        "es": "La clave recibida por correo electrónico (un UUID, 36 caracteres)."
       },
       "required": true
     },
@@ -59,11 +73,15 @@
       "type": "section",
       "label": {
         "en": "Trip 1",
-        "fr": "Trajet 1"
+        "fr": "Trajet 1",
+        "de": "Strecke 1",
+        "es": "Trayecto 1"
       },
       "description": {
         "en": "A station name (\"Rennes\", \"Lyon Part Dieu\"), its UIC code (\"87471003\") or the identifier given by the \"Find a station\" button (\"stop_area:SNCF:87471003\"). Only direct trains are followed. The travel window and days are optional: with them, the trains of the next window are followed and the API is read often only around it (it saves the daily quota).",
-        "fr": "Un nom de gare (« Rennes », « Lyon Part Dieu »), son code UIC (« 87471003 ») ou l’identifiant donné par le bouton « Chercher une gare » (« stop_area:SNCF:87471003 »). Seuls les trains directs sont suivis. La plage horaire et les jours sont optionnels : avec eux, ce sont les trains de la prochaine plage qui sont suivis, et l’API n’est lue souvent qu’autour d’elle (cela économise le quota quotidien)."
+        "fr": "Un nom de gare (« Rennes », « Lyon Part Dieu »), son code UIC (« 87471003 ») ou l’identifiant donné par le bouton « Chercher une gare » (« stop_area:SNCF:87471003 »). Seuls les trains directs sont suivis. La plage horaire et les jours sont optionnels : avec eux, ce sont les trains de la prochaine plage qui sont suivis, et l’API n’est lue souvent qu’autour d’elle (cela économise le quota quotidien).",
+        "de": "Ein Bahnhofsname („Rennes“, „Lyon Part Dieu“), sein UIC-Code („87471003“) oder die Kennung, die die Schaltfläche „Bahnhof suchen“ liefert („stop_area:SNCF:87471003“). Nur Direktzüge werden verfolgt. Zeitfenster und Tage sind optional: Mit ihnen werden die Züge des nächsten Zeitfensters verfolgt, und die API wird nur um dieses herum häufig abgefragt (das schont das Tageskontingent).",
+        "es": "Un nombre de estación («Rennes», «Lyon Part Dieu»), su código UIC («87471003») o el identificador que da el botón «Buscar una estación» («stop_area:SNCF:87471003»). Solo se siguen los trenes directos. La franja horaria y los días son opcionales: con ellos se siguen los trenes de la próxima franja, y la API solo se consulta a menudo alrededor de ella (ahorra la cuota diaria)."
       }
     },
     {
@@ -71,11 +89,15 @@
       "type": "string",
       "label": {
         "en": "Departure station",
-        "fr": "Gare de départ"
+        "fr": "Gare de départ",
+        "de": "Abfahrtsbahnhof",
+        "es": "Estación de salida"
       },
       "placeholder": {
         "en": "Rennes",
-        "fr": "Rennes"
+        "fr": "Rennes",
+        "de": "Rennes",
+        "es": "Rennes"
       },
       "required": false
     },
@@ -84,11 +106,15 @@
       "type": "string",
       "label": {
         "en": "Arrival station",
-        "fr": "Gare d’arrivée"
+        "fr": "Gare d’arrivée",
+        "de": "Ankunftsbahnhof",
+        "es": "Estación de llegada"
       },
       "placeholder": {
         "en": "Nantes",
-        "fr": "Nantes"
+        "fr": "Nantes",
+        "de": "Nantes",
+        "es": "Nantes"
       },
       "required": false
     },
@@ -97,15 +123,21 @@
       "type": "string",
       "label": {
         "en": "Travel window",
-        "fr": "Plage horaire"
+        "fr": "Plage horaire",
+        "de": "Zeitfenster",
+        "es": "Franja horaria"
       },
       "description": {
         "en": "Departures between these times, e.g. 07:00-09:30. Empty: the next trains, all day.",
-        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée."
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée.",
+        "de": "Abfahrten zwischen diesen Uhrzeiten, z. B. 07:00-09:30. Leer: die nächsten Züge, den ganzen Tag.",
+        "es": "Salidas entre estas horas, por ejemplo 07:00-09:30. Vacío: los próximos trenes, todo el día."
       },
       "placeholder": {
         "en": "07:00-09:30",
-        "fr": "07:00-09:30"
+        "fr": "07:00-09:30",
+        "de": "07:00-09:30",
+        "es": "07:00-09:30"
       },
       "required": false
     },
@@ -114,60 +146,78 @@
       "type": "multi_select",
       "label": {
         "en": "Travel days",
-        "fr": "Jours de trajet"
+        "fr": "Jours de trajet",
+        "de": "Reisetage",
+        "es": "Días de viaje"
       },
       "description": {
         "en": "Empty: every day.",
-        "fr": "Vide : tous les jours."
+        "fr": "Vide : tous les jours.",
+        "de": "Leer: jeden Tag.",
+        "es": "Vacío: todos los días."
       },
       "options": [
         {
           "value": "mon",
           "label": {
             "en": "Monday",
-            "fr": "Lundi"
+            "fr": "Lundi",
+            "de": "Montag",
+            "es": "Lunes"
           }
         },
         {
           "value": "tue",
           "label": {
             "en": "Tuesday",
-            "fr": "Mardi"
+            "fr": "Mardi",
+            "de": "Dienstag",
+            "es": "Martes"
           }
         },
         {
           "value": "wed",
           "label": {
             "en": "Wednesday",
-            "fr": "Mercredi"
+            "fr": "Mercredi",
+            "de": "Mittwoch",
+            "es": "Miércoles"
           }
         },
         {
           "value": "thu",
           "label": {
             "en": "Thursday",
-            "fr": "Jeudi"
+            "fr": "Jeudi",
+            "de": "Donnerstag",
+            "es": "Jueves"
           }
         },
         {
           "value": "fri",
           "label": {
             "en": "Friday",
-            "fr": "Vendredi"
+            "fr": "Vendredi",
+            "de": "Freitag",
+            "es": "Viernes"
           }
         },
         {
           "value": "sat",
           "label": {
             "en": "Saturday",
-            "fr": "Samedi"
+            "fr": "Samedi",
+            "de": "Samstag",
+            "es": "Sábado"
           }
         },
         {
           "value": "sun",
           "label": {
             "en": "Sunday",
-            "fr": "Dimanche"
+            "fr": "Dimanche",
+            "de": "Sonntag",
+            "es": "Domingo"
           }
         }
       ],
@@ -178,11 +228,15 @@
       "type": "section",
       "label": {
         "en": "Trip 2 (optional)",
-        "fr": "Trajet 2 (optionnel)"
+        "fr": "Trajet 2 (optionnel)",
+        "de": "Strecke 2 (optional)",
+        "es": "Trayecto 2 (opcional)"
       },
       "description": {
         "en": "Same fields as trip 1, for example the way back. Leave empty when unused.",
-        "fr": "Mêmes champs que le trajet 1, par exemple le retour. Laissez vide si inutile."
+        "fr": "Mêmes champs que le trajet 1, par exemple le retour. Laissez vide si inutile.",
+        "de": "Dieselben Felder wie bei Strecke 1, zum Beispiel für die Rückfahrt. Leer lassen, wenn nicht benötigt.",
+        "es": "Los mismos campos que el trayecto 1, por ejemplo para la vuelta. Déjalo vacío si no lo usas."
       }
     },
     {
@@ -190,11 +244,15 @@
       "type": "string",
       "label": {
         "en": "Departure station",
-        "fr": "Gare de départ"
+        "fr": "Gare de départ",
+        "de": "Abfahrtsbahnhof",
+        "es": "Estación de salida"
       },
       "placeholder": {
         "en": "Nantes",
-        "fr": "Nantes"
+        "fr": "Nantes",
+        "de": "Nantes",
+        "es": "Nantes"
       },
       "required": false
     },
@@ -203,11 +261,15 @@
       "type": "string",
       "label": {
         "en": "Arrival station",
-        "fr": "Gare d’arrivée"
+        "fr": "Gare d’arrivée",
+        "de": "Ankunftsbahnhof",
+        "es": "Estación de llegada"
       },
       "placeholder": {
         "en": "Rennes",
-        "fr": "Rennes"
+        "fr": "Rennes",
+        "de": "Rennes",
+        "es": "Rennes"
       },
       "required": false
     },
@@ -216,15 +278,21 @@
       "type": "string",
       "label": {
         "en": "Travel window",
-        "fr": "Plage horaire"
+        "fr": "Plage horaire",
+        "de": "Zeitfenster",
+        "es": "Franja horaria"
       },
       "description": {
         "en": "Departures between these times, e.g. 07:00-09:30. Empty: the next trains, all day.",
-        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée."
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée.",
+        "de": "Abfahrten zwischen diesen Uhrzeiten, z. B. 07:00-09:30. Leer: die nächsten Züge, den ganzen Tag.",
+        "es": "Salidas entre estas horas, por ejemplo 07:00-09:30. Vacío: los próximos trenes, todo el día."
       },
       "placeholder": {
         "en": "17:00-19:30",
-        "fr": "17:00-19:30"
+        "fr": "17:00-19:30",
+        "de": "17:00-19:30",
+        "es": "17:00-19:30"
       },
       "required": false
     },
@@ -233,60 +301,78 @@
       "type": "multi_select",
       "label": {
         "en": "Travel days",
-        "fr": "Jours de trajet"
+        "fr": "Jours de trajet",
+        "de": "Reisetage",
+        "es": "Días de viaje"
       },
       "description": {
         "en": "Empty: every day.",
-        "fr": "Vide : tous les jours."
+        "fr": "Vide : tous les jours.",
+        "de": "Leer: jeden Tag.",
+        "es": "Vacío: todos los días."
       },
       "options": [
         {
           "value": "mon",
           "label": {
             "en": "Monday",
-            "fr": "Lundi"
+            "fr": "Lundi",
+            "de": "Montag",
+            "es": "Lunes"
           }
         },
         {
           "value": "tue",
           "label": {
             "en": "Tuesday",
-            "fr": "Mardi"
+            "fr": "Mardi",
+            "de": "Dienstag",
+            "es": "Martes"
           }
         },
         {
           "value": "wed",
           "label": {
             "en": "Wednesday",
-            "fr": "Mercredi"
+            "fr": "Mercredi",
+            "de": "Mittwoch",
+            "es": "Miércoles"
           }
         },
         {
           "value": "thu",
           "label": {
             "en": "Thursday",
-            "fr": "Jeudi"
+            "fr": "Jeudi",
+            "de": "Donnerstag",
+            "es": "Jueves"
           }
         },
         {
           "value": "fri",
           "label": {
             "en": "Friday",
-            "fr": "Vendredi"
+            "fr": "Vendredi",
+            "de": "Freitag",
+            "es": "Viernes"
           }
         },
         {
           "value": "sat",
           "label": {
             "en": "Saturday",
-            "fr": "Samedi"
+            "fr": "Samedi",
+            "de": "Samstag",
+            "es": "Sábado"
           }
         },
         {
           "value": "sun",
           "label": {
             "en": "Sunday",
-            "fr": "Dimanche"
+            "fr": "Dimanche",
+            "de": "Sonntag",
+            "es": "Domingo"
           }
         }
       ],
@@ -297,11 +383,15 @@
       "type": "section",
       "label": {
         "en": "Trip 3 (optional)",
-        "fr": "Trajet 3 (optionnel)"
+        "fr": "Trajet 3 (optionnel)",
+        "de": "Strecke 3 (optional)",
+        "es": "Trayecto 3 (opcional)"
       },
       "description": {
         "en": "Same fields as trip 1, for example the way back. Leave empty when unused.",
-        "fr": "Mêmes champs que le trajet 1, par exemple le retour. Laissez vide si inutile."
+        "fr": "Mêmes champs que le trajet 1, par exemple le retour. Laissez vide si inutile.",
+        "de": "Dieselben Felder wie bei Strecke 1, zum Beispiel für die Rückfahrt. Leer lassen, wenn nicht benötigt.",
+        "es": "Los mismos campos que el trayecto 1, por ejemplo para la vuelta. Déjalo vacío si no lo usas."
       }
     },
     {
@@ -309,11 +399,15 @@
       "type": "string",
       "label": {
         "en": "Departure station",
-        "fr": "Gare de départ"
+        "fr": "Gare de départ",
+        "de": "Abfahrtsbahnhof",
+        "es": "Estación de salida"
       },
       "placeholder": {
         "en": "Nantes",
-        "fr": "Nantes"
+        "fr": "Nantes",
+        "de": "Nantes",
+        "es": "Nantes"
       },
       "required": false
     },
@@ -322,11 +416,15 @@
       "type": "string",
       "label": {
         "en": "Arrival station",
-        "fr": "Gare d’arrivée"
+        "fr": "Gare d’arrivée",
+        "de": "Ankunftsbahnhof",
+        "es": "Estación de llegada"
       },
       "placeholder": {
         "en": "Rennes",
-        "fr": "Rennes"
+        "fr": "Rennes",
+        "de": "Rennes",
+        "es": "Rennes"
       },
       "required": false
     },
@@ -335,15 +433,21 @@
       "type": "string",
       "label": {
         "en": "Travel window",
-        "fr": "Plage horaire"
+        "fr": "Plage horaire",
+        "de": "Zeitfenster",
+        "es": "Franja horaria"
       },
       "description": {
         "en": "Departures between these times, e.g. 07:00-09:30. Empty: the next trains, all day.",
-        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée."
+        "fr": "Départs entre ces heures, par exemple 07:00-09:30. Vide : les prochains trains, toute la journée.",
+        "de": "Abfahrten zwischen diesen Uhrzeiten, z. B. 07:00-09:30. Leer: die nächsten Züge, den ganzen Tag.",
+        "es": "Salidas entre estas horas, por ejemplo 07:00-09:30. Vacío: los próximos trenes, todo el día."
       },
       "placeholder": {
         "en": "17:00-19:30",
-        "fr": "17:00-19:30"
+        "fr": "17:00-19:30",
+        "de": "17:00-19:30",
+        "es": "17:00-19:30"
       },
       "required": false
     },
@@ -352,60 +456,78 @@
       "type": "multi_select",
       "label": {
         "en": "Travel days",
-        "fr": "Jours de trajet"
+        "fr": "Jours de trajet",
+        "de": "Reisetage",
+        "es": "Días de viaje"
       },
       "description": {
         "en": "Empty: every day.",
-        "fr": "Vide : tous les jours."
+        "fr": "Vide : tous les jours.",
+        "de": "Leer: jeden Tag.",
+        "es": "Vacío: todos los días."
       },
       "options": [
         {
           "value": "mon",
           "label": {
             "en": "Monday",
-            "fr": "Lundi"
+            "fr": "Lundi",
+            "de": "Montag",
+            "es": "Lunes"
           }
         },
         {
           "value": "tue",
           "label": {
             "en": "Tuesday",
-            "fr": "Mardi"
+            "fr": "Mardi",
+            "de": "Dienstag",
+            "es": "Martes"
           }
         },
         {
           "value": "wed",
           "label": {
             "en": "Wednesday",
-            "fr": "Mercredi"
+            "fr": "Mercredi",
+            "de": "Mittwoch",
+            "es": "Miércoles"
           }
         },
         {
           "value": "thu",
           "label": {
             "en": "Thursday",
-            "fr": "Jeudi"
+            "fr": "Jeudi",
+            "de": "Donnerstag",
+            "es": "Jueves"
           }
         },
         {
           "value": "fri",
           "label": {
             "en": "Friday",
-            "fr": "Vendredi"
+            "fr": "Vendredi",
+            "de": "Freitag",
+            "es": "Viernes"
           }
         },
         {
           "value": "sat",
           "label": {
             "en": "Saturday",
-            "fr": "Samedi"
+            "fr": "Samedi",
+            "de": "Samstag",
+            "es": "Sábado"
           }
         },
         {
           "value": "sun",
           "label": {
             "en": "Sunday",
-            "fr": "Dimanche"
+            "fr": "Dimanche",
+            "de": "Sonntag",
+            "es": "Domingo"
           }
         }
       ],
@@ -416,11 +538,15 @@
       "type": "section",
       "label": {
         "en": "Settings",
-        "fr": "Réglages"
+        "fr": "Réglages",
+        "de": "Einstellungen",
+        "es": "Ajustes"
       },
       "description": {
         "en": "With a travel window, a trip costs about 250 requests a day with the default values; without one, about 800. Three trips and an open departures board stay within the 5 000 a day.",
-        "fr": "Avec une plage horaire, un trajet coûte environ 250 requêtes par jour avec les valeurs par défaut ; sans plage, environ 800. Trois trajets et un tableau des départs ouvert restent sous les 5 000 par jour."
+        "fr": "Avec une plage horaire, un trajet coûte environ 250 requêtes par jour avec les valeurs par défaut ; sans plage, environ 800. Trois trajets et un tableau des départs ouvert restent sous les 5 000 par jour.",
+        "de": "Mit Zeitfenster kostet eine Strecke mit den Standardwerten etwa 250 Anfragen pro Tag, ohne etwa 800. Drei Strecken und eine geöffnete Abfahrtstafel bleiben unter den 5 000 pro Tag.",
+        "es": "Con franja horaria, un trayecto cuesta unas 250 peticiones al día con los valores por defecto; sin ella, unas 800. Tres trayectos y un panel de salidas abierto se quedan por debajo de las 5 000 diarias."
       }
     },
     {
@@ -428,11 +554,15 @@
       "type": "number",
       "label": {
         "en": "Trains followed per trip",
-        "fr": "Trains suivis par trajet"
+        "fr": "Trains suivis par trajet",
+        "de": "Verfolgte Züge pro Strecke",
+        "es": "Trenes seguidos por trayecto"
       },
       "description": {
         "en": "The next trains of each trip, between 1 and 8.",
-        "fr": "Les prochains trains de chaque trajet, entre 1 et 8."
+        "fr": "Les prochains trains de chaque trajet, entre 1 et 8.",
+        "de": "Die nächsten Züge jeder Strecke, zwischen 1 und 8.",
+        "es": "Los próximos trenes de cada trayecto, entre 1 y 8."
       },
       "min": 1,
       "max": 8,
@@ -444,11 +574,15 @@
       "type": "number",
       "label": {
         "en": "Delay threshold (min)",
-        "fr": "Seuil de retard (min)"
+        "fr": "Seuil de retard (min)",
+        "de": "Verspätungsschwelle (min)",
+        "es": "Umbral de retraso (min)"
       },
       "description": {
         "en": "From how many minutes a train counts as delayed (scenes, disrupted trains, colors).",
-        "fr": "À partir de combien de minutes un train compte comme en retard (scènes, trains perturbés, couleurs)."
+        "fr": "À partir de combien de minutes un train compte comme en retard (scènes, trains perturbés, couleurs).",
+        "de": "Ab wie vielen Minuten ein Zug als verspätet gilt (Szenen, gestörte Züge, Farben).",
+        "es": "A partir de cuántos minutos un tren cuenta como retrasado (escenas, trenes con incidencias, colores)."
       },
       "min": 1,
       "max": 30,
@@ -460,11 +594,15 @@
       "type": "number",
       "label": {
         "en": "Refresh around the window (min)",
-        "fr": "Rafraîchissement autour de la plage (min)"
+        "fr": "Rafraîchissement autour de la plage (min)",
+        "de": "Aktualisierung um das Zeitfenster (min)",
+        "es": "Actualización en torno a la franja (min)"
       },
       "description": {
         "en": "From an hour before the travel window to its end (all day without a window), between 2 and 30 minutes.",
-        "fr": "D’une heure avant la plage horaire jusqu’à sa fin (toute la journée sans plage), entre 2 et 30 minutes."
+        "fr": "D’une heure avant la plage horaire jusqu’à sa fin (toute la journée sans plage), entre 2 et 30 minutes.",
+        "de": "Von einer Stunde vor dem Zeitfenster bis zu seinem Ende (ohne Zeitfenster den ganzen Tag), zwischen 2 und 30 Minuten.",
+        "es": "Desde una hora antes de la franja horaria hasta su final (todo el día sin franja), entre 2 y 30 minutos."
       },
       "min": 2,
       "max": 30,
@@ -476,15 +614,84 @@
       "type": "number",
       "label": {
         "en": "Refresh the rest of the time (min)",
-        "fr": "Rafraîchissement le reste du temps (min)"
+        "fr": "Rafraîchissement le reste du temps (min)",
+        "de": "Aktualisierung in der übrigen Zeit (min)",
+        "es": "Actualización el resto del tiempo (min)"
       },
       "description": {
         "en": "Outside the window (and at night), between 10 and 180 minutes.",
-        "fr": "En dehors de la plage (et la nuit), entre 10 et 180 minutes."
+        "fr": "En dehors de la plage (et la nuit), entre 10 et 180 minutes.",
+        "de": "Außerhalb des Zeitfensters (und nachts), zwischen 10 und 180 Minuten.",
+        "es": "Fuera de la franja (y de noche), entre 10 y 180 minutos."
       },
       "min": 10,
       "max": 180,
       "default": 30,
+      "required": false
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "label": {
+        "en": "Language of the texts",
+        "fr": "Langue des textes",
+        "de": "Sprache der Texte",
+        "es": "Idioma de los textos"
+      },
+      "description": {
+        "en": "Device names, scene summaries and outputs. Automatic: the language of your dashboard, once an SNCF widget has been displayed.",
+        "fr": "Noms des appareils, résumés et sorties des scènes. Automatique : la langue de votre tableau de bord, dès qu’un widget SNCF a été affiché.",
+        "de": "Gerätenamen, Zusammenfassungen und Ausgaben der Szenen. Automatisch: die Sprache deines Dashboards, sobald ein SNCF-Widget angezeigt wurde.",
+        "es": "Nombres de los dispositivos, resúmenes y salidas de las escenas. Automático: el idioma de tu panel, en cuanto se haya mostrado un widget de SNCF."
+      },
+      "options": [
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic",
+            "fr": "Automatique",
+            "de": "Automatisch",
+            "es": "Automático"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "English",
+            "de": "English",
+            "es": "English"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "Français",
+            "fr": "Français",
+            "de": "Français",
+            "es": "Français"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "Deutsch",
+            "fr": "Deutsch",
+            "de": "Deutsch",
+            "es": "Deutsch"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Español",
+            "fr": "Español",
+            "de": "Español",
+            "es": "Español"
+          }
+        }
+      ],
+      "default": "auto",
       "required": false
     }
   ],
@@ -493,7 +700,9 @@
       "key": "test_connection",
       "label": {
         "en": "Test the connection",
-        "fr": "Tester la connexion"
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
       },
       "timeout_seconds": 60
     },
@@ -501,7 +710,9 @@
       "key": "search_station",
       "label": {
         "en": "Find a station",
-        "fr": "Chercher une gare"
+        "fr": "Chercher une gare",
+        "de": "Bahnhof suchen",
+        "es": "Buscar una estación"
       },
       "timeout_seconds": 20,
       "fields": [
@@ -510,11 +721,15 @@
           "type": "string",
           "label": {
             "en": "Station name",
-            "fr": "Nom de la gare"
+            "fr": "Nom de la gare",
+            "de": "Bahnhofsname",
+            "es": "Nombre de la estación"
           },
           "placeholder": {
             "en": "Lyon Part",
-            "fr": "Lyon Part"
+            "fr": "Lyon Part",
+            "de": "Lyon Part",
+            "es": "Lyon Part"
           },
           "required": true
         }
@@ -526,11 +741,15 @@
       "key": "train_delayed",
       "label": {
         "en": "SNCF: train delayed",
-        "fr": "SNCF : train en retard"
+        "fr": "SNCF : train en retard",
+        "de": "SNCF: Zug verspätet",
+        "es": "SNCF: tren con retraso"
       },
       "description": {
         "en": "A followed train becomes late (from the delay threshold), or later still: 15 min, then 30 min.",
-        "fr": "Un train suivi prend du retard (à partir du seuil de retard), ou davantage : 15 min, puis 30 min."
+        "fr": "Un train suivi prend du retard (à partir du seuil de retard), ou davantage : 15 min, puis 30 min.",
+        "de": "Ein verfolgter Zug wird verspätet (ab der Verspätungsschwelle) oder noch später: 15 min, dann 30 min.",
+        "es": "Un tren seguido se retrasa (a partir del umbral de retraso), o aún más: 15 min, luego 30 min."
       },
       "fields": [
         {
@@ -539,11 +758,15 @@
           "source": "devices",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           },
           "description": {
             "en": "One of the SNCF devices. Leave empty for any trip.",
-            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets."
+            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets.",
+            "de": "Eines der SNCF-Geräte. Leer lassen für jede Strecke.",
+            "es": "Uno de los dispositivos de SNCF. Déjalo vacío para cualquier trayecto."
           },
           "required": false
         },
@@ -552,32 +775,42 @@
           "type": "multi_select",
           "label": {
             "en": "Delay",
-            "fr": "Retard"
+            "fr": "Retard",
+            "de": "Verspätung",
+            "es": "Retraso"
           },
           "description": {
             "en": "Leave empty for any delay.",
-            "fr": "Laissez vide pour tous les retards."
+            "fr": "Laissez vide pour tous les retards.",
+            "de": "Leer lassen für jede Verspätung.",
+            "es": "Déjalo vacío para cualquier retraso."
           },
           "options": [
             {
               "value": "minor",
               "label": {
                 "en": "Under 15 min",
-                "fr": "Moins de 15 min"
+                "fr": "Moins de 15 min",
+                "de": "Unter 15 min",
+                "es": "Menos de 15 min"
               }
             },
             {
               "value": "major",
               "label": {
                 "en": "15 to 29 min",
-                "fr": "15 à 29 min"
+                "fr": "15 à 29 min",
+                "de": "15 bis 29 min",
+                "es": "De 15 a 29 min"
               }
             },
             {
               "value": "severe",
               "label": {
                 "en": "30 min and more",
-                "fr": "30 min et plus"
+                "fr": "30 min et plus",
+                "de": "30 min und mehr",
+                "es": "30 min o más"
               }
             }
           ],
@@ -590,7 +823,9 @@
           "type": "string",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           }
         },
         {
@@ -598,7 +833,9 @@
           "type": "string",
           "label": {
             "en": "Train number",
-            "fr": "Numéro du train"
+            "fr": "Numéro du train",
+            "de": "Zugnummer",
+            "es": "Número del tren"
           }
         },
         {
@@ -606,7 +843,9 @@
           "type": "string",
           "label": {
             "en": "Train type (TER, TGV INOUI…)",
-            "fr": "Type de train (TER, TGV INOUI…)"
+            "fr": "Type de train (TER, TGV INOUI…)",
+            "de": "Zugart (TER, TGV INOUI…)",
+            "es": "Tipo de tren (TER, TGV INOUI…)"
           }
         },
         {
@@ -614,7 +853,9 @@
           "type": "string",
           "label": {
             "en": "Direction",
-            "fr": "Direction"
+            "fr": "Direction",
+            "de": "Richtung",
+            "es": "Dirección"
           }
         },
         {
@@ -622,7 +863,9 @@
           "type": "string",
           "label": {
             "en": "Departure date (YYYY-MM-DD)",
-            "fr": "Date de départ (AAAA-MM-JJ)"
+            "fr": "Date de départ (AAAA-MM-JJ)",
+            "de": "Abfahrtsdatum (JJJJ-MM-TT)",
+            "es": "Fecha de salida (AAAA-MM-DD)"
           }
         },
         {
@@ -630,7 +873,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -638,7 +883,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Voraussichtliche Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -646,7 +893,9 @@
           "type": "string",
           "label": {
             "en": "Expected arrival (HH:MM)",
-            "fr": "Arrivée estimée (HH:MM)"
+            "fr": "Arrivée estimée (HH:MM)",
+            "de": "Voraussichtliche Ankunft (HH:MM)",
+            "es": "Llegada estimada (HH:MM)"
           }
         },
         {
@@ -654,7 +903,9 @@
           "type": "number",
           "label": {
             "en": "Delay (min)",
-            "fr": "Retard (min)"
+            "fr": "Retard (min)",
+            "de": "Verspätung (min)",
+            "es": "Retraso (min)"
           }
         },
         {
@@ -662,7 +913,9 @@
           "type": "string",
           "label": {
             "en": "Cause",
-            "fr": "Motif"
+            "fr": "Motif",
+            "de": "Grund",
+            "es": "Motivo"
           }
         },
         {
@@ -670,11 +923,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein fertiger Satz für eine Nachricht.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -683,11 +940,15 @@
       "key": "train_cancelled",
       "label": {
         "en": "SNCF: train cancelled",
-        "fr": "SNCF : train supprimé"
+        "fr": "SNCF : train supprimé",
+        "de": "SNCF: Zug fällt aus",
+        "es": "SNCF: tren cancelado"
       },
       "description": {
         "en": "A followed train is cancelled, or no longer stops at a station of the trip.",
-        "fr": "Un train suivi est supprimé, ou ne dessert plus une gare du trajet."
+        "fr": "Un train suivi est supprimé, ou ne dessert plus une gare du trajet.",
+        "de": "Ein verfolgter Zug fällt aus oder hält nicht mehr an einem Bahnhof der Strecke.",
+        "es": "Un tren seguido se cancela, o ya no para en una estación del trayecto."
       },
       "fields": [
         {
@@ -696,11 +957,15 @@
           "source": "devices",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           },
           "description": {
             "en": "One of the SNCF devices. Leave empty for any trip.",
-            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets."
+            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets.",
+            "de": "Eines der SNCF-Geräte. Leer lassen für jede Strecke.",
+            "es": "Uno de los dispositivos de SNCF. Déjalo vacío para cualquier trayecto."
           },
           "required": false
         }
@@ -711,7 +976,9 @@
           "type": "string",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           }
         },
         {
@@ -719,7 +986,9 @@
           "type": "string",
           "label": {
             "en": "Train number",
-            "fr": "Numéro du train"
+            "fr": "Numéro du train",
+            "de": "Zugnummer",
+            "es": "Número del tren"
           }
         },
         {
@@ -727,7 +996,9 @@
           "type": "string",
           "label": {
             "en": "Train type (TER, TGV INOUI…)",
-            "fr": "Type de train (TER, TGV INOUI…)"
+            "fr": "Type de train (TER, TGV INOUI…)",
+            "de": "Zugart (TER, TGV INOUI…)",
+            "es": "Tipo de tren (TER, TGV INOUI…)"
           }
         },
         {
@@ -735,7 +1006,9 @@
           "type": "string",
           "label": {
             "en": "Direction",
-            "fr": "Direction"
+            "fr": "Direction",
+            "de": "Richtung",
+            "es": "Dirección"
           }
         },
         {
@@ -743,7 +1016,9 @@
           "type": "string",
           "label": {
             "en": "Departure date (YYYY-MM-DD)",
-            "fr": "Date de départ (AAAA-MM-JJ)"
+            "fr": "Date de départ (AAAA-MM-JJ)",
+            "de": "Abfahrtsdatum (JJJJ-MM-TT)",
+            "es": "Fecha de salida (AAAA-MM-DD)"
           }
         },
         {
@@ -751,7 +1026,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -759,7 +1036,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Voraussichtliche Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -767,7 +1046,9 @@
           "type": "string",
           "label": {
             "en": "Expected arrival (HH:MM)",
-            "fr": "Arrivée estimée (HH:MM)"
+            "fr": "Arrivée estimée (HH:MM)",
+            "de": "Voraussichtliche Ankunft (HH:MM)",
+            "es": "Llegada estimada (HH:MM)"
           }
         },
         {
@@ -775,7 +1056,9 @@
           "type": "string",
           "label": {
             "en": "Cause",
-            "fr": "Motif"
+            "fr": "Motif",
+            "de": "Grund",
+            "es": "Motivo"
           }
         },
         {
@@ -783,11 +1066,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein fertiger Satz für eine Nachricht.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -796,11 +1083,15 @@
       "key": "departure_soon",
       "label": {
         "en": "SNCF: train leaving soon",
-        "fr": "SNCF : départ imminent"
+        "fr": "SNCF : départ imminent",
+        "de": "SNCF: Zug fährt bald ab",
+        "es": "SNCF: salida inminente"
       },
       "description": {
         "en": "A followed train leaves in N minutes, counted on its real-time departure (delays included).",
-        "fr": "Un train suivi part dans N minutes, comptées sur son départ en temps réel (retards compris)."
+        "fr": "Un train suivi part dans N minutes, comptées sur son départ en temps réel (retards compris).",
+        "de": "Ein verfolgter Zug fährt in N Minuten ab, gerechnet ab seiner Echtzeit-Abfahrt (Verspätungen inbegriffen).",
+        "es": "Un tren seguido sale dentro de N minutos, contados sobre su salida en tiempo real (retrasos incluidos)."
       },
       "fields": [
         {
@@ -809,11 +1100,15 @@
           "source": "devices",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           },
           "description": {
             "en": "One of the SNCF devices. Leave empty for any trip.",
-            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets."
+            "fr": "Un des appareils SNCF. Laissez vide pour tous les trajets.",
+            "de": "Eines der SNCF-Geräte. Leer lassen für jede Strecke.",
+            "es": "Uno de los dispositivos de SNCF. Déjalo vacío para cualquier trayecto."
           },
           "required": false
         },
@@ -822,56 +1117,72 @@
           "type": "select",
           "label": {
             "en": "Leaves in",
-            "fr": "Départ dans"
+            "fr": "Départ dans",
+            "de": "Abfahrt in",
+            "es": "Sale en"
           },
           "options": [
             {
               "value": "5",
               "label": {
                 "en": "5 min",
-                "fr": "5 min"
+                "fr": "5 min",
+                "de": "5 min",
+                "es": "5 min"
               }
             },
             {
               "value": "10",
               "label": {
                 "en": "10 min",
-                "fr": "10 min"
+                "fr": "10 min",
+                "de": "10 min",
+                "es": "10 min"
               }
             },
             {
               "value": "15",
               "label": {
                 "en": "15 min",
-                "fr": "15 min"
+                "fr": "15 min",
+                "de": "15 min",
+                "es": "15 min"
               }
             },
             {
               "value": "20",
               "label": {
                 "en": "20 min",
-                "fr": "20 min"
+                "fr": "20 min",
+                "de": "20 min",
+                "es": "20 min"
               }
             },
             {
               "value": "30",
               "label": {
                 "en": "30 min",
-                "fr": "30 min"
+                "fr": "30 min",
+                "de": "30 min",
+                "es": "30 min"
               }
             },
             {
               "value": "45",
               "label": {
                 "en": "45 min",
-                "fr": "45 min"
+                "fr": "45 min",
+                "de": "45 min",
+                "es": "45 min"
               }
             },
             {
               "value": "60",
               "label": {
                 "en": "60 min",
-                "fr": "60 min"
+                "fr": "60 min",
+                "de": "60 min",
+                "es": "60 min"
               }
             }
           ],
@@ -884,7 +1195,9 @@
           "type": "string",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           }
         },
         {
@@ -892,7 +1205,9 @@
           "type": "string",
           "label": {
             "en": "Train number",
-            "fr": "Numéro du train"
+            "fr": "Numéro du train",
+            "de": "Zugnummer",
+            "es": "Número del tren"
           }
         },
         {
@@ -900,7 +1215,9 @@
           "type": "string",
           "label": {
             "en": "Train type (TER, TGV INOUI…)",
-            "fr": "Type de train (TER, TGV INOUI…)"
+            "fr": "Type de train (TER, TGV INOUI…)",
+            "de": "Zugart (TER, TGV INOUI…)",
+            "es": "Tipo de tren (TER, TGV INOUI…)"
           }
         },
         {
@@ -908,7 +1225,9 @@
           "type": "string",
           "label": {
             "en": "Direction",
-            "fr": "Direction"
+            "fr": "Direction",
+            "de": "Richtung",
+            "es": "Dirección"
           }
         },
         {
@@ -916,7 +1235,9 @@
           "type": "string",
           "label": {
             "en": "Departure date (YYYY-MM-DD)",
-            "fr": "Date de départ (AAAA-MM-JJ)"
+            "fr": "Date de départ (AAAA-MM-JJ)",
+            "de": "Abfahrtsdatum (JJJJ-MM-TT)",
+            "es": "Fecha de salida (AAAA-MM-DD)"
           }
         },
         {
@@ -924,7 +1245,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -932,7 +1255,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Voraussichtliche Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -940,7 +1265,9 @@
           "type": "string",
           "label": {
             "en": "Expected arrival (HH:MM)",
-            "fr": "Arrivée estimée (HH:MM)"
+            "fr": "Arrivée estimée (HH:MM)",
+            "de": "Voraussichtliche Ankunft (HH:MM)",
+            "es": "Llegada estimada (HH:MM)"
           }
         },
         {
@@ -948,7 +1275,9 @@
           "type": "number",
           "label": {
             "en": "Delay (min)",
-            "fr": "Retard (min)"
+            "fr": "Retard (min)",
+            "de": "Verspätung (min)",
+            "es": "Retraso (min)"
           }
         },
         {
@@ -956,11 +1285,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein fertiger Satz für eine Nachricht.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -971,11 +1304,15 @@
       "key": "get_next_trains",
       "label": {
         "en": "SNCF: next trains",
-        "fr": "SNCF : prochains trains"
+        "fr": "SNCF : prochains trains",
+        "de": "SNCF: nächste Züge",
+        "es": "SNCF: próximos trenes"
       },
       "description": {
         "en": "The next train of a trip, its delay or cancellation, and a sentence for a message.",
-        "fr": "Le prochain train d’un trajet, son retard ou sa suppression, et une phrase pour un message."
+        "fr": "Le prochain train d’un trajet, son retard ou sa suppression, et une phrase pour un message.",
+        "de": "Der nächste Zug einer Strecke, seine Verspätung oder sein Ausfall und ein Satz für eine Nachricht.",
+        "es": "El próximo tren de un trayecto, su retraso o cancelación, y una frase para un mensaje."
       },
       "timeout_seconds": 30,
       "fields": [
@@ -985,11 +1322,15 @@
           "source": "devices",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           },
           "description": {
             "en": "One of the SNCF devices. Leave empty for the first trip.",
-            "fr": "Un des appareils SNCF. Laissez vide pour le premier trajet."
+            "fr": "Un des appareils SNCF. Laissez vide pour le premier trajet.",
+            "de": "Eines der SNCF-Geräte. Leer lassen für die erste Strecke.",
+            "es": "Uno de los dispositivos de SNCF. Déjalo vacío para el primer trayecto."
           },
           "required": false
         }
@@ -1000,7 +1341,9 @@
           "type": "string",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           }
         },
         {
@@ -1008,7 +1351,9 @@
           "type": "boolean",
           "label": {
             "en": "Train found",
-            "fr": "Train trouvé"
+            "fr": "Train trouvé",
+            "de": "Zug gefunden",
+            "es": "Tren encontrado"
           }
         },
         {
@@ -1016,7 +1361,9 @@
           "type": "string",
           "label": {
             "en": "Train number",
-            "fr": "Numéro du train"
+            "fr": "Numéro du train",
+            "de": "Zugnummer",
+            "es": "Número del tren"
           }
         },
         {
@@ -1024,7 +1371,9 @@
           "type": "string",
           "label": {
             "en": "Train type",
-            "fr": "Type de train"
+            "fr": "Type de train",
+            "de": "Zugart",
+            "es": "Tipo de tren"
           }
         },
         {
@@ -1032,7 +1381,9 @@
           "type": "string",
           "label": {
             "en": "Scheduled departure (HH:MM)",
-            "fr": "Départ prévu (HH:MM)"
+            "fr": "Départ prévu (HH:MM)",
+            "de": "Planmäßige Abfahrt (HH:MM)",
+            "es": "Salida prevista (HH:MM)"
           }
         },
         {
@@ -1040,7 +1391,9 @@
           "type": "string",
           "label": {
             "en": "Expected departure (HH:MM)",
-            "fr": "Départ estimé (HH:MM)"
+            "fr": "Départ estimé (HH:MM)",
+            "de": "Voraussichtliche Abfahrt (HH:MM)",
+            "es": "Salida estimada (HH:MM)"
           }
         },
         {
@@ -1048,7 +1401,9 @@
           "type": "string",
           "label": {
             "en": "Expected arrival (HH:MM)",
-            "fr": "Arrivée estimée (HH:MM)"
+            "fr": "Arrivée estimée (HH:MM)",
+            "de": "Voraussichtliche Ankunft (HH:MM)",
+            "es": "Llegada estimada (HH:MM)"
           }
         },
         {
@@ -1056,7 +1411,9 @@
           "type": "number",
           "label": {
             "en": "Delay (min)",
-            "fr": "Retard (min)"
+            "fr": "Retard (min)",
+            "de": "Verspätung (min)",
+            "es": "Retraso (min)"
           }
         },
         {
@@ -1064,7 +1421,9 @@
           "type": "string",
           "label": {
             "en": "Status (on_time, delayed, cancelled)",
-            "fr": "État (on_time, delayed, cancelled)"
+            "fr": "État (on_time, delayed, cancelled)",
+            "de": "Status (on_time, delayed, cancelled)",
+            "es": "Estado (on_time, delayed, cancelled)"
           }
         },
         {
@@ -1072,7 +1431,9 @@
           "type": "boolean",
           "label": {
             "en": "Cancelled",
-            "fr": "Supprimé"
+            "fr": "Supprimé",
+            "de": "Ausgefallen",
+            "es": "Cancelado"
           }
         },
         {
@@ -1080,7 +1441,9 @@
           "type": "number",
           "label": {
             "en": "Minutes until departure",
-            "fr": "Minutes avant le départ"
+            "fr": "Minutes avant le départ",
+            "de": "Minuten bis zur Abfahrt",
+            "es": "Minutos hasta la salida"
           }
         },
         {
@@ -1088,7 +1451,9 @@
           "type": "number",
           "label": {
             "en": "Disrupted trains",
-            "fr": "Trains perturbés"
+            "fr": "Trains perturbés",
+            "de": "Gestörte Züge",
+            "es": "Trenes con incidencias"
           }
         },
         {
@@ -1096,7 +1461,9 @@
           "type": "string",
           "label": {
             "en": "Cause",
-            "fr": "Motif"
+            "fr": "Motif",
+            "de": "Grund",
+            "es": "Motivo"
           }
         },
         {
@@ -1104,11 +1471,15 @@
           "type": "string",
           "label": {
             "en": "Summary",
-            "fr": "Résumé"
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
           },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein fertiger Satz für eine Nachricht.",
+            "es": "Una frase lista para poner en un mensaje."
           }
         }
       ]
@@ -1119,11 +1490,15 @@
       "key": "trip",
       "label": {
         "en": "SNCF trip",
-        "fr": "Trajet SNCF"
+        "fr": "Trajet SNCF",
+        "de": "SNCF-Strecke",
+        "es": "Trayecto SNCF"
       },
       "description": {
         "en": "The next trains of a trip, with their delays and cancellations.",
-        "fr": "Les prochains trains d’un trajet, avec retards et suppressions."
+        "fr": "Les prochains trains d’un trajet, avec retards et suppressions.",
+        "de": "Die nächsten Züge einer Strecke, mit Verspätungen und Ausfällen.",
+        "es": "Los próximos trenes de un trayecto, con sus retrasos y cancelaciones."
       },
       "icon": "navigation",
       "settings": [
@@ -1133,11 +1508,15 @@
           "source": "devices",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           },
           "description": {
             "en": "One of the SNCF devices. Leave empty for the first trip.",
-            "fr": "Un des appareils SNCF. Laissez vide pour le premier trajet."
+            "fr": "Un des appareils SNCF. Laissez vide pour le premier trajet.",
+            "de": "Eines der SNCF-Geräte. Leer lassen für die erste Strecke.",
+            "es": "Uno de los dispositivos de SNCF. Déjalo vacío para el primer trayecto."
           },
           "required": false
         }
@@ -1147,11 +1526,15 @@
       "key": "board",
       "label": {
         "en": "SNCF departures",
-        "fr": "Départs SNCF"
+        "fr": "Départs SNCF",
+        "de": "SNCF-Abfahrten",
+        "es": "Salidas SNCF"
       },
       "description": {
         "en": "The departures board of a station, every direction.",
-        "fr": "Le tableau des départs d’une gare, toutes directions."
+        "fr": "Le tableau des départs d’une gare, toutes directions.",
+        "de": "Die Abfahrtstafel eines Bahnhofs, alle Richtungen.",
+        "es": "El panel de salidas de una estación, todas las direcciones."
       },
       "icon": "list",
       "settings": [
@@ -1160,15 +1543,21 @@
           "type": "string",
           "label": {
             "en": "Station",
-            "fr": "Gare"
+            "fr": "Gare",
+            "de": "Bahnhof",
+            "es": "Estación"
           },
           "description": {
             "en": "A name, a UIC code or an identifier. Empty: the departure station of the trip below.",
-            "fr": "Un nom, un code UIC ou un identifiant. Vide : la gare de départ du trajet ci-dessous."
+            "fr": "Un nom, un code UIC ou un identifiant. Vide : la gare de départ du trajet ci-dessous.",
+            "de": "Ein Name, ein UIC-Code oder eine Kennung. Leer: der Abfahrtsbahnhof der Strecke unten.",
+            "es": "Un nombre, un código UIC o un identificador. Vacío: la estación de salida del trayecto de abajo."
           },
           "placeholder": {
             "en": "Rennes",
-            "fr": "Rennes"
+            "fr": "Rennes",
+            "de": "Rennes",
+            "es": "Rennes"
           },
           "required": false
         },
@@ -1178,11 +1567,15 @@
           "source": "devices",
           "label": {
             "en": "Trip",
-            "fr": "Trajet"
+            "fr": "Trajet",
+            "de": "Strecke",
+            "es": "Trayecto"
           },
           "description": {
             "en": "Used when no station is typed. Empty: the first trip.",
-            "fr": "Utilisé si aucune gare n’est saisie. Vide : le premier trajet."
+            "fr": "Utilisé si aucune gare n’est saisie. Vide : le premier trajet.",
+            "de": "Wird verwendet, wenn kein Bahnhof eingegeben ist. Leer: die erste Strecke.",
+            "es": "Se usa si no se escribe ninguna estación. Vacío: el primer trayecto."
           },
           "required": false
         },
@@ -1191,7 +1584,9 @@
           "type": "number",
           "label": {
             "en": "Departures shown",
-            "fr": "Départs affichés"
+            "fr": "Départs affichés",
+            "de": "Angezeigte Abfahrten",
+            "es": "Salidas mostradas"
           },
           "min": 1,
           "max": 8,

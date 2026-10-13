@@ -15,14 +15,12 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 import { buildDevice } from '../src/device.js';
+import { LANGUAGES } from '../src/i18n.js';
 import { fakeGladys, TRIP } from './helpers/fixtures.js';
 
 const read = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const baseline = read('./fixtures/discovery.baseline.json');
 const manifest = read('../gladys-assistant-integration.json');
-
-// Device names follow the language; nothing Discovery compares may.
-const LANGUAGES = ['en', 'fr', 'de', 'es'];
 
 const ETERNAL = [
   'external_id',

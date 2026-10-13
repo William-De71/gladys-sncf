@@ -24,7 +24,7 @@
 
 import { readFileSync } from 'node:fs';
 import { GladysIntegration, logger } from '@gladysassistant/integration-sdk';
-import { normalizeConfig, readLanguage, INTERNAL_KEYS } from './src/config.js';
+import { normalizeConfig, readLanguage, INTERNAL_KEYS, AUTO_LANGUAGE } from './src/config.js';
 import { createSncfClient, buildUserAgent } from './src/sncf-api.js';
 import { createStore } from './src/store.js';
 import { createQuota } from './src/quota.js';
@@ -36,7 +36,7 @@ import { buildSceneEvent } from './src/events.js';
 import { parseDepartures } from './src/trains.js';
 import { isBusy } from './src/schedule.js';
 import { formatTime, toNavitiaDate } from './src/time.js';
-import { t, all } from './src/i18n.js';
+import { t, all, LANGUAGES } from './src/i18n.js';
 import { SCENE_ACTIONS, buildNextTrainsOutputs } from './src/scene-actions.js';
 import {
   WIDGETS,
@@ -62,7 +62,8 @@ const RESOLVE_RETRY_MS = 5 * 60 * 1000;
 const gladys = new GladysIntegration();
 
 let config = normalizeConfig();
-// Language of the last widget request: names of the devices, scene summaries.
+// Language of the last widget request: the fallback of the texts Gladys does
+// not ask for in a language, when the `language` setting is `auto`.
 let language = 'fr';
 // Device external ids the user created (states are only published for them).
 let createdDevices = new Set();
@@ -100,6 +101,16 @@ function rememberLanguage(next) {
   gladys
     .setConfig({ [INTERNAL_KEYS.language]: next })
     .catch((err) => logger.warn(`Unable to store the language: ${err.message}`));
+}
+
+/**
+ * @description Language of the texts Gladys does not ask for in a language
+ * (device names and states, scene summaries and outputs): the `language`
+ * setting, or the language of the last widget request when it is `auto`.
+ * @returns {string} The language.
+ */
+function textLanguage() {
+  return config.language === AUTO_LANGUAGE ? language : config.language;
 }
 
 /**
@@ -189,7 +200,10 @@ async function publishStates(trip, snapshot) {
     return;
   }
   await gladys.publishStates(
-    buildStates(gladys, trip, snapshot.trains, { threshold: config.delayThreshold, language }),
+    buildStates(gladys, trip, snapshot.trains, {
+      threshold: config.delayThreshold,
+      language: textLanguage(),
+    }),
   );
 }
 
@@ -201,7 +215,7 @@ async function publishStates(trip, snapshot) {
  */
 async function publishEvents(trip, events) {
   for (const event of events) {
-    const { key, data } = buildSceneEvent(gladys, trip, event, language);
+    const { key, data } = buildSceneEvent(gladys, trip, event, textLanguage());
     logger.info(`${trip.name}: ${key} (${data.train_number} ${data.scheduled_departure})`);
     try {
       await gladys.publishSceneEvent(key, data);
@@ -324,7 +338,9 @@ function resolveTrip(deviceExternalId) {
  * @returns {Promise<number>} How many devices were offered.
  */
 async function publishDiscoveredDevices() {
-  await gladys.publishDiscoveredDevices(trips.map((trip) => buildDevice(gladys, trip, language)));
+  await gladys.publishDiscoveredDevices(
+    trips.map((trip) => buildDevice(gladys, trip, textLanguage())),
+  );
   return trips.length;
 }
 
@@ -432,7 +448,7 @@ gladys.onSceneAction(SCENE_ACTIONS.GET_NEXT_TRAINS, async (fields) => {
     trains: snapshot.trains,
     threshold: config.delayThreshold,
     now: Date.now(),
-    language,
+    language: textLanguage(),
   });
 });
 
@@ -447,54 +463,43 @@ gladys.onAction(ACTIONS.TEST_CONNECTION, async () => {
     await refreshStatus();
     return all('statusNoTrip');
   }
-  const lines = { en: [], fr: [] };
+  const lines = [];
   for (const trip of trips) {
     try {
       const snapshot = await watcher.get(trip, 0);
       const first = snapshot.trains[0];
       const next = first ? formatTime(first.baseDeparture) : '–';
-      lines.en.push(`${trip.name}: OK, ${snapshot.trains.length} train(s), next ${next}`);
-      lines.fr.push(`${trip.name} : OK, ${snapshot.trains.length} train(s), prochain ${next}`);
+      lines.push(all('tripOk', { trip: trip.name, count: snapshot.trains.length, next }));
     } catch (err) {
-      lines.en.push(`${trip.name}: ${readErrorMessage(err, 'en')}`);
-      lines.fr.push(`${trip.name} : ${readErrorMessage(err, 'fr')}`);
+      lines.push(
+        all('tripError', (lang) => ({ trip: trip.name, error: readErrorMessage(err, lang) })),
+      );
     }
   }
-  unknownStations.forEach((station) => {
-    lines.en.push(`"${station}": station not found`);
-    lines.fr.push(`« ${station} » : gare introuvable`);
-  });
-  lines.en.push(`${quota.used()} requests in 24 h`);
-  lines.fr.push(`${quota.used()} requêtes en 24 h`);
+  unknownStations.forEach((station) => lines.push(all('stationNotFound', { name: station })));
+  lines.push(all('requestsCount', { used: quota.used() }));
   await refreshStatus();
-  return { en: lines.en.join(' · '), fr: lines.fr.join(' · ') };
+  return Object.fromEntries(
+    LANGUAGES.map((lang) => [lang, lines.map((line) => line[lang]).join(' · ')]),
+  );
 });
 
 gladys.onAction(ACTIONS.SEARCH_STATION, async (fields) => {
   const query = typeof fields.query === 'string' ? fields.query.trim() : '';
   if (query.length < 2) {
-    return {
-      en: 'Type at least 2 characters of the station name.',
-      fr: 'Saisissez au moins 2 caractères du nom de la gare.',
-    };
+    return all('searchTooShort');
   }
   if (!config.apiKey) {
     return all('noApiKey');
   }
   const found = await sncf.searchStations(query, 6);
   if (found.length === 0) {
-    return {
-      en: `No station matches "${query}".`,
-      fr: `Aucune gare ne correspond à « ${query} ».`,
-    };
+    return all('searchNone', { query });
   }
   const list = found
     .map((station) => `${station.label || station.name} = ${station.id}`)
     .join(' · ');
-  return {
-    en: `${list}. Copy the identifier of the right station into a trip field.`,
-    fr: `${list}. Copiez l’identifiant de la bonne gare dans un champ de trajet.`,
-  };
+  return all('searchFound', { list });
 });
 
 // --- Devices -----------------------------------------------------------------------

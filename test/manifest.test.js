@@ -12,7 +12,9 @@ import {
   DELAY_THRESHOLD,
   POLL_INTERVAL,
   IDLE_INTERVAL,
+  AUTO_LANGUAGE,
 } from '../src/config.js';
+import { LANGUAGES } from '../src/i18n.js';
 import { buildSceneEvent } from '../src/events.js';
 import { NOW, MINUTE, TRIP, fakeGladys } from './helpers/fixtures.js';
 
@@ -138,4 +140,12 @@ test('declares the configuration actions the code answers', () => {
     'search_station',
     'test_connection',
   ]);
+});
+
+test('offers the languages of the code, automatic by default', () => {
+  const field = byKey(manifest.config_schema).get('language');
+  assert.equal(field.type, 'select');
+  assert.deepEqual(values(field), [AUTO_LANGUAGE, ...LANGUAGES]);
+  assert.equal(field.default, AUTO_LANGUAGE);
+  assert.notEqual(field.required, true, 'an existing configuration has no language');
 });

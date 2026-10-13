@@ -8,6 +8,7 @@ import {
   readLanguage,
   TRAIN_COUNT,
   POLL_INTERVAL,
+  AUTO_LANGUAGE,
 } from '../src/config.js';
 
 const KEY = '0f1e2d3c-4b5a-6978-8796-a5b4c3d2e1f0';
@@ -65,4 +66,13 @@ test('reads the days as sent by the form, or stored as a string', () => {
 test('keeps a valid stored language only', () => {
   assert.equal(readLanguage({ last_language: 'fr' }, 'en'), 'fr');
   assert.equal(readLanguage({ last_language: 'french' }, 'en'), 'en');
+});
+
+test('reads the language setting, automatic unless a known language', () => {
+  for (const language of ['en', 'fr', 'de', 'es']) {
+    assert.equal(normalizeConfig({ language }).language, language);
+  }
+  assert.equal(normalizeConfig({ language: 'auto' }).language, AUTO_LANGUAGE);
+  assert.equal(normalizeConfig({ language: 'it' }).language, AUTO_LANGUAGE);
+  assert.equal(normalizeConfig({}).language, AUTO_LANGUAGE);
 });

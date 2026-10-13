@@ -13,12 +13,17 @@
 //   - `train_count`             how many trains are followed per trip;
 //   - `delay_threshold`         from how many minutes a train is "delayed";
 //   - `poll_interval`           minutes between two reads around the window;
-//   - `idle_interval`           minutes between two reads the rest of the time.
+//   - `idle_interval`           minutes between two reads the rest of the time;
+//   - `language`                language of the texts Gladys does not ask for
+//                               in a language (device names, scene summaries):
+//                               `auto` follows the last widget request.
 //
 // Internal keys, outside the config_schema (never shown in the UI):
 //   - `last_language`   language of the last widget request, for the device
 //                       names and the scene texts after a restart.
 // -----------------------------------------------------------------------------
+
+import { isLanguage } from './i18n.js';
 
 const MAX_TRIPS = 3;
 const TRAIN_COUNT = { min: 1, max: 8, default: 4 };
@@ -26,6 +31,7 @@ const DELAY_THRESHOLD = { min: 1, max: 30, default: 5 };
 const POLL_INTERVAL = { min: 2, max: 30, default: 3 };
 const IDLE_INTERVAL = { min: 10, max: 180, default: 30 };
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+const AUTO_LANGUAGE = 'auto';
 // SNCF API keys are UUIDs; anything shorter cannot be one.
 const API_KEY_REGEX = /^[A-Za-z0-9-]{20,64}$/;
 const HOURS_REGEX = /^(\d{1,2})[:hH](\d{2})?\s*[-–à>]+\s*(\d{1,2})[:hH](\d{2})?$/;
@@ -137,8 +143,9 @@ function readTrips(config) {
  * @description Normalize the raw config object from the host API.
  * @param {object} [rawConfig] - The raw config values.
  * @returns {{ apiKey: string, trips: Array, trainCount: number,
- * delayThreshold: number, pollInterval: number, idleInterval: number }} The
- * config (intervals in minutes).
+ * delayThreshold: number, pollInterval: number, idleInterval: number,
+ * language: string }} The config (intervals in minutes, language 'auto' or a
+ * language code).
  * @example
  * normalizeConfig({ api_key: '…', trip_1_from: 'Rennes', trip_1_to: 'Nantes' });
  */
@@ -152,6 +159,7 @@ function normalizeConfig(rawConfig = {}) {
     delayThreshold: readNumber(config.delay_threshold, DELAY_THRESHOLD),
     pollInterval: readNumber(config.poll_interval, POLL_INTERVAL),
     idleInterval: readNumber(config.idle_interval, IDLE_INTERVAL),
+    language: isLanguage(config.language) ? config.language : AUTO_LANGUAGE,
   };
 }
 
@@ -174,6 +182,7 @@ export {
   DELAY_THRESHOLD,
   POLL_INTERVAL,
   IDLE_INTERVAL,
+  AUTO_LANGUAGE,
   DAYS,
   INTERNAL_KEYS,
   normalizeConfig,

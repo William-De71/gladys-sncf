@@ -14,7 +14,7 @@
 // -----------------------------------------------------------------------------
 
 import { WIDGET_COLORS } from '@gladysassistant/integration-sdk';
-import { t, trainLabel } from './i18n.js';
+import { t, trainLabel, localeOf } from './i18n.js';
 import { trainStatus } from './trains.js';
 import { formatTime, parisDate } from './time.js';
 
@@ -130,7 +130,7 @@ function buildTripWidget({ trip, snapshot, threshold, busy, language, now }) {
   const components = [{ type: 'text', variant: 'heading', text: clip(trip.name, 40) }];
   const day = snapshot.span?.date;
   if (day && day !== parisDate(now)) {
-    const label = new Intl.DateTimeFormat(language === 'fr' ? 'fr-FR' : 'en-GB', {
+    const label = new Intl.DateTimeFormat(localeOf(language), {
       timeZone: 'Europe/Paris',
       weekday: 'long',
       day: 'numeric',
