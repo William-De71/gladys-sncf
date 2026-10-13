@@ -276,6 +276,19 @@ const TEXTS = {
     de: '{list}. Kopiere die Kennung des richtigen Bahnhofs in ein Streckenfeld.',
     es: '{list}. Copia el identificador de la estación correcta en un campo de trayecto.',
   },
+  // transport badge
+  transportQuota: {
+    en: 'Daily quota of the SNCF API reached: the trains are read again later.',
+    fr: 'Quota quotidien de l’API SNCF atteint : les trains seront relus plus tard.',
+    de: 'Tageskontingent der SNCF-API erreicht: Die Züge werden später erneut gelesen.',
+    es: 'Cuota diaria de la API de SNCF alcanzada: los trenes se volverán a leer más tarde.',
+  },
+  transportBudget: {
+    en: 'Close to the daily quota: this trip is read less often for a while.',
+    fr: 'Proche du quota quotidien : ce trajet est lu moins souvent pendant un moment.',
+    de: 'Nahe am Tageskontingent: Diese Strecke wird eine Weile seltener gelesen.',
+    es: 'Cerca de la cuota diaria: este trayecto se lee con menos frecuencia durante un rato.',
+  },
 };
 
 /**

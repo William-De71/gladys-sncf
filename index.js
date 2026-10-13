@@ -33,6 +33,7 @@ import { createWatcher } from './src/watcher.js';
 import { createTracker } from './src/tracker.js';
 import { buildDevice, buildStates, idsOf, tripFromExternalId, tripKey } from './src/device.js';
 import { buildSceneEvent } from './src/events.js';
+import { transportOf } from './src/transport.js';
 import { parseDepartures } from './src/trains.js';
 import { isBusy } from './src/schedule.js';
 import { formatTime, toNavitiaDate } from './src/time.js';
@@ -69,6 +70,10 @@ let language = 'fr';
 let createdDevices = new Set();
 // Last connection status sent, to send it again only when it changes.
 let lastStatus = null;
+// trip key -> error of its last read (null when it worked), and the transport
+// badge last sent per device external id.
+const outcomes = new Map();
+const transports = new Map();
 // The configured trips whose stations are known.
 let trips = [];
 // What the user typed and the SNCF does not know.
@@ -208,6 +213,30 @@ async function publishStates(trip, snapshot) {
 }
 
 /**
+ * @description Publish the transport badge of a trip, when its device exists
+ * and the badge changed.
+ * @param {object} trip - The resolved trip.
+ * @returns {Promise<void>}
+ */
+async function publishTransport(trip) {
+  const externalId = idsOf(gladys, trip).device;
+  if (!createdDevices.has(externalId) || !outcomes.has(trip.key)) {
+    return;
+  }
+  const entry = transportOf(externalId, outcomes.get(trip.key));
+  const signature = JSON.stringify(entry);
+  if (transports.get(externalId) === signature) {
+    return;
+  }
+  try {
+    await gladys.publishTransports([entry]);
+    transports.set(externalId, signature);
+  } catch (err) {
+    logger.warn(`Unable to publish the transport of ${trip.name}: ${err.message}`);
+  }
+}
+
+/**
  * @description Publish scene events, one by one.
  * @param {object} trip - The resolved trip.
  * @param {object[]} events - The tracker events.
@@ -232,6 +261,8 @@ const watcher = createWatcher({
   getTrips: () => (config.apiKey ? trips : []),
   getSettings: () => config,
   onRead: async (trip, snapshot, { changed }) => {
+    outcomes.set(trip.key, null);
+    await publishTransport(trip);
     await publishEvents(trip, tracker.diff(trip.key, snapshot.trains, config.delayThreshold));
     await publishEvents(trip, tracker.reminders(trip.key, snapshot.trains, Date.now()));
     await tracker.persist(Date.now());
@@ -243,7 +274,9 @@ const watcher = createWatcher({
     }
     await refreshStatus();
   },
-  onError: async () => {
+  onError: async (trip, err) => {
+    outcomes.set(trip.key, err);
+    await publishTransport(trip);
     await refreshStatus();
   },
   logger,
@@ -510,7 +543,11 @@ gladys.onScanRequest(async () => {
 
 gladys.onDeviceCreated(async (device) => {
   await refreshCreatedDevices();
+  transports.delete(device.external_id);
   const trip = tripFromExternalId(device.external_id, trips);
+  if (trip) {
+    await publishTransport(trip);
+  }
   const snapshot = trip ? watcher.peek(trip.key) : null;
   if (snapshot) {
     // States sent before the device existed were dropped by Gladys: send
@@ -581,6 +618,7 @@ gladys.on('connected', async () => {
   await loadConfig();
   await refreshCreatedDevices();
   lastStatus = null;
+  transports.clear();
   watcher.start();
   await applyConfig();
 });
