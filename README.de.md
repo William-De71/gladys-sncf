@@ -5,13 +5,13 @@
 [![Lizenz: Apache-2.0](https://img.shields.io/badge/Lizenz-Apache--2.0-blue.svg)](LICENSE)
 [![Neueste Version](https://img.shields.io/github/v/release/William-De71/gladys-sncf?sort=semver)](https://github.com/William-De71/gladys-sncf/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-sncf/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-sncf/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![SNCF für Gladys Assistant](cover.jpg)
 
 Externe [Gladys Assistant](https://gladysassistant.com)-Integration für **SNCF-Züge**: die nächsten Züge deiner
 Strecken in Echtzeit — Verspätungen, Ausfälle, Gründe — als Geräte, **Szenen-Auslöser**, eine **Szenenaktion**
-und **Dashboard-Widgets**, gebaut auf `@gladysassistant/integration-sdk` 0.15.
+und **Dashboard-Widgets**, gebaut auf `@gladysassistant/integration-sdk` 0.16.
 
 Daten: die offizielle [SNCF-API](https://numerique.sncf.com/startup/api/) (eine Navitia-Instanz, kostenloser
 Schlüssel, 5 000 Anfragen pro Tag). Echtzeit für TGV INOUI, OUIGO, Intercités, TER, Lyria und Eurostar; Transilien
@@ -227,7 +227,7 @@ Node 22 oder neuer. Die Tests (`node --test`) greifen nie aufs Netzwerk zu: Sie 
 - `docs/illustrations/render.sh` erzeugt die Widget-Illustrationen in `docs/assets` aus dem Widget-Code neu
   (Headless-Chrome, Styles des Gladys-Frontends): nach jeder Änderung an einem Widget erneut ausführen.
 
-`gladys_version` ist `>=5.1.1` (Widgets, Szenen-Auslöser und -Aktionen, `source: "devices"`).
+`gladys_version` ist `>=5.3.0` (Widgets, Szenen-Auslöser und -Aktionen, `source: "devices"`; Katalog-Schlüsselwörter/-Länder von Gladys 5.3).
 
 Nur für die Entwicklung: `SNCF_API_URL` richtet den Client auf eine andere API, `SNCF_DATA_DIR` verschiebt die
 Dateien von `/data`.

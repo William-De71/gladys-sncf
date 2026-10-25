@@ -5,13 +5,13 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/William-De71/gladys-sncf?sort=semver)](https://github.com/William-De71/gladys-sncf/releases)
 [![CI](https://img.shields.io/github/actions/workflow/status/William-De71/gladys-sncf/release.yml?branch=main&label=CI)](https://github.com/William-De71/gladys-sncf/actions/workflows/release.yml)
-[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.1.1-2f6fb5)](https://gladysassistant.com)
+[![Gladys](https://img.shields.io/badge/Gladys-%E2%89%A5%205.3.0-2f6fb5)](https://gladysassistant.com)
 
 ![SNCF for Gladys Assistant](cover.jpg)
 
 External [Gladys Assistant](https://gladysassistant.com) integration for **SNCF trains**: the next trains of your
 trips in real time — delays, cancellations, causes — as devices, **scene triggers**, a **scene action** and
-**dashboard widgets**, built on `@gladysassistant/integration-sdk` 0.15.
+**dashboard widgets**, built on `@gladysassistant/integration-sdk` 0.16.
 
 Data: the official [SNCF API](https://numerique.sncf.com/startup/api/) (a Navitia instance, free key, 5 000
 requests a day). Real time for TGV INOUI, OUIGO, Intercités, TER, Lyria and Eurostar; Transilien is timetable only.
@@ -217,7 +217,7 @@ Beyond the unit tests:
 - `docs/illustrations/render.sh` regenerates the widget illustrations of `docs/assets` from the widget code
   (headless Chrome, the Gladys front styles): run it after any change to a widget.
 
-`gladys_version` is `>=5.1.1` (widgets, scene triggers and actions, `source: "devices"`).
+`gladys_version` is `>=5.3.0` (widgets, scene triggers and actions, `source: "devices"`; catalog keywords/countries of Gladys 5.3).
 
 For development only, `SNCF_API_URL` points the client to another API and `SNCF_DATA_DIR` moves the files of
 `/data`.
