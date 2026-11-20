@@ -12,7 +12,7 @@
 //                      resets. `Retry-After` when present, an hour otherwise;
 //   - 404 `no_solution` on /journeys: no train matches, an empty answer;
 //   - other 404        `{ error: { id, message } }`: date out of bounds,
-//                      unknown station…;
+//                      unknown station (`unknown_object`, `no_origin`…);
 //   - 5xx / network    retried once after a short pause.
 //
 // Every request leaving the container is counted (see quota.js), failed
@@ -24,7 +24,20 @@ const API_URL = process.env.SNCF_API_URL || 'https://api.sncf.com/v1/coverage/sn
 const REQUEST_TIMEOUT_MS = 15000;
 const RETRY_DELAY_MS = 2000;
 const DEFAULT_RETRY_AFTER_S = 3600;
-const STOP_AREA_REGEX = /^stop_area:[A-Za-z0-9_-]+:[A-Za-z0-9_.-]+$/;
+// Any id the API gives: since the move of the SNCF to NeTEx / SIRI (24
+// November 2026) the ids are no longer "stop_area:SNCF:<UIC code>" and their
+// new shape is not documented ("::" separators are common in NeTEx).
+const STOP_AREA_REGEX = /^stop_area:[^\s/?#]{1,200}$/;
+const UIC_REGEX = /^(?:00)?(\d{8})$/;
+// The type of the UIC code in the `codes` of a stop area, tried in order.
+const UIC_CODE_TYPES = ['uic', 'UIC8'];
+// Navitia error ids of a station the API no longer knows.
+const UNKNOWN_STATION_IDS = new Set([
+  'unknown_object',
+  'no_origin',
+  'no_destination',
+  'no_origin_nor_destination',
+]);
 
 /**
  * @description Error of an SNCF API call.
@@ -54,6 +67,11 @@ class SncfError extends Error {
   get isQuota() {
     return this.status === 429;
   }
+
+  /** @returns {boolean} A station id of the request is unknown (renamed by the SNCF). */
+  get isUnknownStation() {
+    return (this.status === 404 || this.status === 400) && UNKNOWN_STATION_IDS.has(this.id);
+  }
 }
 
 /**
@@ -79,6 +97,27 @@ function buildUserAgent({ name, version, homepage = '' }) {
  */
 function isStopAreaId(value) {
   return typeof value === 'string' && STOP_AREA_REGEX.test(value);
+}
+
+/**
+ * @description The UIC code of a stop area, from its `codes` then from its id.
+ * @param {object} area - The stop area (`id`, `codes`).
+ * @returns {string} The 8-digit code, '' when none.
+ * @example
+ * uicOfStopArea({ id: 'stop_area:SNCF:FR::StopPlace:1', codes: [{ type: 'uic', value: '87471003' }] });
+ * // -> '87471003'
+ */
+function uicOfStopArea(area) {
+  const codes = Array.isArray(area?.codes) ? area.codes : [];
+  for (const code of codes) {
+    const match =
+      /uic/i.test(String(code?.type ?? '')) && UIC_REGEX.exec(String(code?.value ?? ''));
+    if (match) {
+      return match[1];
+    }
+  }
+  const legacy = /^stop_area:SNCF:(\d{8})$/.exec(String(area?.id ?? ''));
+  return legacy ? legacy[1] : '';
 }
 
 /**
@@ -203,7 +242,7 @@ function createSncfClient({
     }
   }
 
-  return {
+  const client = {
     get,
 
     /**
@@ -220,28 +259,77 @@ function createSncfClient({
           id: place.id,
           name: String(place.stop_area?.name || place.name || place.id),
           label: String(place.name || place.stop_area?.label || place.stop_area?.name || ''),
+          uic: uicOfStopArea({ id: place.id, codes: place.stop_area?.codes }),
         }));
     },
 
     /**
      * @description Read a station by id.
      * @param {string} id - The stop area id.
-     * @returns {Promise<{ id: string, name: string, label: string }|null>} The station, null when unknown.
+     * @returns {Promise<{ id: string, name: string, label: string, uic: string }|null>} The station, null when unknown.
      */
     async getStation(id) {
       if (!isStopAreaId(id)) {
         return null;
       }
       try {
-        const answer = await get(`stop_areas/${encodeURIComponent(id)}`, { depth: 0 });
+        const answer = await get(`stop_areas/${encodeURIComponent(id)}`, { depth: 1 });
         const area = Array.isArray(answer.stop_areas) ? answer.stop_areas[0] : null;
-        return area ? { id, name: String(area.name || id), label: String(area.label || '') } : null;
+        return area
+          ? {
+              id,
+              name: String(area.name || id),
+              label: String(area.label || ''),
+              uic: uicOfStopArea({ id, codes: area.codes }),
+            }
+          : null;
       } catch (err) {
         if (err.status === 404 || err.status === 400) {
           return null;
         }
         throw err;
       }
+    },
+
+    /**
+     * @description Read a station by its UIC code: the old id first
+     * ("stop_area:SNCF:<code>"), then a search on the codes of the stop areas
+     * (the ids carry no UIC code any more since November 2026).
+     * @param {string} uic - The 8-digit UIC code.
+     * @returns {Promise<{ id: string, name: string, label: string, uic: string }|null>} The station.
+     */
+    async getStationByUic(uic) {
+      const legacy = await client.getStation(`stop_area:SNCF:${uic}`);
+      if (legacy) {
+        return legacy;
+      }
+      for (const type of UIC_CODE_TYPES) {
+        let answer;
+        try {
+          answer = await get('stop_areas', {
+            filter: `stop_area.has_code(${type}, ${uic})`,
+            count: 1,
+            depth: 1,
+          });
+        } catch (err) {
+          if (err.status === 404 || err.status === 400) {
+            continue;
+          }
+          throw err;
+        }
+        const area = (Array.isArray(answer.stop_areas) ? answer.stop_areas : []).find((item) =>
+          isStopAreaId(item?.id),
+        );
+        if (area) {
+          return {
+            id: area.id,
+            name: String(area.name || area.id),
+            label: String(area.label || ''),
+            uic,
+          };
+        }
+      }
+      return null;
     },
 
     /**
@@ -303,6 +391,15 @@ function createSncfClient({
       }
     },
   };
+  return client;
 }
 
-export { API_URL, SncfError, buildUserAgent, buildQuery, isStopAreaId, createSncfClient };
+export {
+  API_URL,
+  SncfError,
+  buildUserAgent,
+  buildQuery,
+  isStopAreaId,
+  uicOfStopArea,
+  createSncfClient,
+};

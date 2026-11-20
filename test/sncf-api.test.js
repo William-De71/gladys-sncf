@@ -1,7 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { createSncfClient, buildQuery, isStopAreaId, API_URL } from '../src/sncf-api.js';
+import {
+  createSncfClient,
+  buildQuery,
+  isStopAreaId,
+  uicOfStopArea,
+  API_URL,
+} from '../src/sncf-api.js';
 
 /**
  * @description A fake fetch answering from a list.
@@ -76,7 +82,7 @@ test('keeps the stop areas of a search, with their names', async () => {
     },
   ]);
   assert.deepEqual(await client(fetchImpl).searchStations('Rennes'), [
-    { id: 'stop_area:SNCF:87471003', name: 'Rennes', label: 'Rennes (Rennes)' },
+    { id: 'stop_area:SNCF:87471003', name: 'Rennes', label: 'Rennes (Rennes)', uic: '87471003' },
   ]);
 });
 
@@ -158,4 +164,62 @@ test('builds the query strings and recognizes stop areas', () => {
   assert.ok(isStopAreaId('stop_area:SNCF:87471003'));
   assert.ok(!isStopAreaId('stop_area:SNCF:87471003/../x'));
   assert.ok(!isStopAreaId('87471003'));
+  // The ids of the NeTEx referential (24 November 2026).
+  assert.ok(isStopAreaId('stop_area:SNCF:FR::StopPlace:87471003:LOC'));
+  assert.ok(isStopAreaId('stop_area:SNCF:FR:StopArea:OCE87471003'));
+  assert.ok(!isStopAreaId('stop_area:SNCF:x y'));
+  assert.ok(!isStopAreaId('stop_area:SNCF:x?y=1'));
+});
+
+test('reads the UIC code of a station from its codes, then from its old id', () => {
+  const id = 'stop_area:SNCF:FR::StopPlace:1:LOC';
+  assert.equal(uicOfStopArea({ id, codes: [{ type: 'uic', value: '87471003' }] }), '87471003');
+  assert.equal(uicOfStopArea({ id, codes: [{ type: 'UIC8', value: '0087471003' }] }), '87471003');
+  assert.equal(uicOfStopArea({ id, codes: [{ type: 'source', value: '87471003' }] }), '');
+  assert.equal(uicOfStopArea({ id: 'stop_area:SNCF:87471003' }), '87471003');
+  assert.equal(uicOfStopArea(null), '');
+});
+
+test('finds a station by UIC code: the old id first, then its codes', async () => {
+  const renumbered = 'stop_area:SNCF:FR::StopPlace:1:LOC';
+  const fetchImpl = fakeFetch([
+    { status: 404, body: { error: { id: 'unknown_object', message: 'Invalid id' } } },
+    { status: 404, body: { error: { id: 'unknown_object', message: 'no stop area' } } },
+    { status: 200, body: { stop_areas: [{ id: renumbered, name: 'Rennes', label: 'Rennes' }] } },
+  ]);
+  assert.deepEqual(await client(fetchImpl).getStationByUic('87471003'), {
+    id: renumbered,
+    name: 'Rennes',
+    label: 'Rennes',
+    uic: '87471003',
+  });
+  assert.equal(fetchImpl.calls.length, 3);
+  const filter = new URL(fetchImpl.calls[2].url).searchParams.get('filter');
+  assert.equal(filter, 'stop_area.has_code(UIC8, 87471003)');
+
+  const legacy = fakeFetch([
+    { status: 200, body: { stop_areas: [{ id: 'stop_area:SNCF:87471003', name: 'Rennes' }] } },
+  ]);
+  assert.equal((await client(legacy).getStationByUic('87471003')).uic, '87471003');
+  assert.equal(legacy.calls.length, 1);
+
+  const none = fakeFetch([
+    { status: 404, body: { error: { id: 'unknown_object', message: 'x' } } },
+    { status: 200, body: { stop_areas: [] } },
+    { status: 400, body: { error: { id: 'bad_filter', message: 'x' } } },
+  ]);
+  assert.equal(await client(none).getStationByUic('87000000'), null);
+});
+
+test('tells a station the API no longer knows from other failures', async () => {
+  const fetchImpl = fakeFetch([
+    { status: 404, body: { error: { id: 'unknown_object', message: 'Invalid id' } } },
+    { status: 404, body: { error: { id: 'no_origin', message: 'no origin' } } },
+    { status: 404, body: { error: { id: 'date_out_of_bounds', message: 'x' } } },
+  ]);
+  const sncf = client(fetchImpl);
+  const request = { from: 'a', to: 'b', datetime: '20261124T070000', count: 4 };
+  await assert.rejects(sncf.journeys(request), (err) => err.isUnknownStation);
+  await assert.rejects(sncf.journeys(request), (err) => err.isUnknownStation);
+  await assert.rejects(sncf.journeys(request), (err) => !err.isUnknownStation);
 });

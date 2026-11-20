@@ -31,6 +31,11 @@ test('builds the trip key from the UIC codes', () => {
     tripKey({ id: 'stop_area:OCE:Foo-Bar' }, { id: NANTES }),
     'stop_area_oce_foo_bar-87481002',
   );
+  // A renumbered station keeps its UIC code, read from its codes.
+  assert.equal(
+    tripKey({ id: 'stop_area:SNCF:FR::StopPlace:1:LOC', uic: '87471003' }, { id: NANTES }),
+    '87471003-87481002',
+  );
 });
 
 test('finds the trip of a device or a feature', () => {

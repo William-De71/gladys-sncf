@@ -66,6 +66,10 @@ test('resolves names, UIC codes and ids, searching a name only once', async () =
       calls.push(['get', id]);
       return id === 'stop_area:SNCF:87481002' ? { id, name: 'Nantes' } : null;
     },
+    getStationByUic: async (uic) => {
+      calls.push(['uic', uic]);
+      return uic === '87481002' ? { id: 'stop_area:SNCF:87481002', name: 'Nantes', uic } : null;
+    },
   };
   let saved = {};
   const store = { load: async () => saved, save: async (value) => (saved = { ...value }) };
@@ -73,11 +77,14 @@ test('resolves names, UIC codes and ids, searching a name only once', async () =
   assert.deepEqual(await stations.resolve(' Rennes '), {
     id: 'stop_area:SNCF:87471003',
     name: 'Rennes',
+    uic: '',
   });
   assert.deepEqual(await stations.resolve('rennes'), {
     id: 'stop_area:SNCF:87471003',
     name: 'Rennes',
+    uic: '',
   });
+  assert.equal((await stations.resolve('87481002')).uic, '87481002');
   assert.equal((await stations.resolve('87481002')).name, 'Nantes');
   assert.equal((await stations.resolve('0087481002')).name, 'Nantes');
   assert.equal((await stations.resolve('stop_area:SNCF:87481002')).name, 'Nantes');
@@ -85,8 +92,8 @@ test('resolves names, UIC codes and ids, searching a name only once', async () =
   assert.equal(await stations.resolve(''), null);
   assert.deepEqual(calls, [
     ['search', 'Rennes'],
-    ['get', 'stop_area:SNCF:87481002'],
-    ['get', 'stop_area:SNCF:87481002'],
+    ['uic', '87481002'],
+    ['uic', '87481002'],
     ['get', 'stop_area:SNCF:87481002'],
     ['search', 'Atlantis'],
   ]);
@@ -95,4 +102,30 @@ test('resolves names, UIC codes and ids, searching a name only once', async () =
   assert.equal((await again.resolve('Rennes')).name, 'Rennes');
   assert.equal(again.peek('RENNES').id, 'stop_area:SNCF:87471003');
   assert.equal(calls.length, 5);
+});
+
+test('forgets the stations the SNCF renumbered, and resolves them again', async () => {
+  let renumbered = false;
+  const sncf = {
+    searchStations: async () => [
+      renumbered
+        ? { id: 'stop_area:SNCF:FR::StopPlace:42:LOC', name: 'Rennes', uic: '87471003' }
+        : { id: 'stop_area:SNCF:87471003', name: 'Rennes' },
+    ],
+  };
+  let saved = {};
+  const store = { load: async () => saved, save: async (value) => (saved = { ...value }) };
+  const stations = createStations({ sncf, store });
+  assert.equal((await stations.resolve('Rennes')).id, 'stop_area:SNCF:87471003');
+  assert.equal((await stations.resolve('rennes ')).id, 'stop_area:SNCF:87471003');
+  renumbered = true;
+  assert.equal(await stations.forget(['stop_area:SNCF:00000000']), 0);
+  assert.equal(await stations.forget(['stop_area:SNCF:87471003']), 1);
+  assert.equal(stations.peek('Rennes'), null);
+  assert.deepEqual(await stations.resolve('Rennes'), {
+    id: 'stop_area:SNCF:FR::StopPlace:42:LOC',
+    name: 'Rennes',
+    uic: '87471003',
+  });
+  assert.equal(saved.rennes.uic, '87471003');
 });

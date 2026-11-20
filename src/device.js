@@ -15,7 +15,10 @@
 //
 // The external id is built on the UIC codes of both stations
 // ("ext:sncf:trip:87471003-87481002"): retyping a station differently keeps
-// the device, choosing another station makes a new one.
+// the device, choosing another station makes a new one. The code comes from
+// the station itself (`uic`, read from its codes), the ids no longer holding
+// it since 24 November 2026; index.js also keeps the key of each trip, so a
+// renumbering of the stations never makes a new device.
 // -----------------------------------------------------------------------------
 
 import {
@@ -37,14 +40,15 @@ const MAX_DISRUPTED = 20;
 
 /**
  * @description The identifier of a trip, from its stations.
- * @param {{ id: string }} from - The departure station.
- * @param {{ id: string }} to - The arrival station.
+ * @param {{ id: string, uic?: string }} from - The departure station.
+ * @param {{ id: string, uic?: string }} to - The arrival station.
  * @returns {string} "87471003-87481002".
  * @example
  * tripKey({ id: 'stop_area:SNCF:87471003' }, { id: 'stop_area:SNCF:87481002' });
  */
 function tripKey(from, to) {
   const part = (station) =>
+    station.uic ||
     uicOf(station.id) ||
     String(station.id)
       .toLowerCase()

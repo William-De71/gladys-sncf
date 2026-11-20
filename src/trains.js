@@ -151,20 +151,35 @@ function targetsTrain(disruption, number, baseDeparture) {
 }
 
 /**
+ * @description Whether a stop point belongs to a station: by the stop area
+ * the API attaches to it, else by the UIC code of its id (the ids before
+ * 24 November 2026).
+ * @param {object} point - The stop point.
+ * @param {{ id: string, uic: string }} station - The station.
+ * @returns {boolean} True when it does.
+ */
+function atStation(point, station) {
+  if (station.id && point?.stop_area?.id === station.id) {
+    return true;
+  }
+  return Boolean(station.uic) && uicOf(point?.id) === station.uic;
+}
+
+/**
  * @description Whether a disruption deletes the stop of a train at a station.
  * @param {object} disruption - The disruption.
- * @param {string} uic - The UIC code of the station.
+ * @param {{ id: string, uic: string }} station - The station.
  * @param {'departure'|'arrival'} side - Which stop time.
  * @returns {boolean} True when the train no longer stops there.
  */
-function deletesStop(disruption, uic, side) {
-  if (!uic) {
+function deletesStop(disruption, station, side) {
+  if (!station.id && !station.uic) {
     return false;
   }
   return (disruption?.impacted_objects ?? []).some((object) =>
     (object?.impacted_stops ?? []).some(
       (stop) =>
-        uicOf(stop?.stop_point?.id) === uic &&
+        atStation(stop?.stop_point, station) &&
         (stop?.[`${side}_status`] === 'deleted' || stop?.stop_time_effect === 'deleted'),
     ),
   );
@@ -207,15 +222,17 @@ function minutesLate(actual, base) {
  * @param {object} [stations] - The trip stations, to spot deleted stops.
  * @param {string} [stations.from] - The departure stop area id.
  * @param {string} [stations.to] - The arrival stop area id.
+ * @param {string} [stations.fromUic] - The UIC code of the departure station.
+ * @param {string} [stations.toUic] - The UIC code of the arrival station.
  * @returns {object[]} The trains, by theoretical departure.
  * @example
  * parseJourneys(answer, { from: 'stop_area:SNCF:87471003', to: 'stop_area:SNCF:87481002' });
  */
-function parseJourneys(answer, { from = '', to = '' } = {}) {
+function parseJourneys(answer, { from = '', to = '', fromUic = '', toUic = '' } = {}) {
   const disruptions = Array.isArray(answer?.disruptions) ? answer.disruptions : [];
   const byId = new Map(disruptions.map((disruption) => [disruption?.id, disruption]));
-  const fromUic = uicOf(from);
-  const toUic = uicOf(to);
+  const origin = { id: from, uic: fromUic || uicOf(from) };
+  const destination = { id: to, uic: toUic || uicOf(to) };
   const trains = [];
   for (const journey of Array.isArray(answer?.journeys) ? answer.journeys : []) {
     const sections = (journey?.sections ?? []).filter((s) => s?.type === 'public_transport');
@@ -238,8 +255,8 @@ function parseJourneys(answer, { from = '', to = '' } = {}) {
       effects.includes(EFFECTS.NO_SERVICE) ||
       linked.some(
         (disruption) =>
-          deletesStop(disruption, fromUic, 'departure') ||
-          deletesStop(disruption, toUic, 'arrival'),
+          deletesStop(disruption, origin, 'departure') ||
+          deletesStop(disruption, destination, 'arrival'),
       );
     trains.push({
       id: `${number}@${baseDeparture}`,

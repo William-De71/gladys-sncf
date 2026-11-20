@@ -82,6 +82,29 @@ test('a train no longer stopping at a station of the trip is cancelled for it', 
   assert.equal(train.cause, 'Arrêt supprimé à Nantes');
 });
 
+test('a deleted stop is found by the stop area of the stop point, whatever its id', () => {
+  const renumbered = 'stop_area:SNCF:FR::StopPlace:9:LOC';
+  const disruption = rawDisruption({
+    effect: 'REDUCED_SERVICE',
+    text: 'Arrêt supprimé',
+    impactedStops: [
+      {
+        stop_point: { id: 'stop_point:SNCF:FR::Quay:9:LOC', stop_area: { id: renumbered } },
+        departure_status: 'deleted',
+      },
+    ],
+  });
+  const answer = journeysAnswer(
+    [rawJourney({ baseDeparture: NOW, disruptions: ['d1'] })],
+    [disruption],
+  );
+  assert.equal(parseJourneys(answer, { from: renumbered, to: NANTES })[0].cancelled, true);
+  assert.equal(
+    parseJourneys(answer, { from: 'stop_area:SNCF:FR::StopPlace:8:LOC' })[0].cancelled,
+    false,
+  );
+});
+
 test('merges the timetable and the real time', () => {
   const base = parseJourneys(
     journeysAnswer([

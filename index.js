@@ -59,6 +59,11 @@ const BOARD_MAX_AGE_MS = 90 * 1000;
 const REMINDER_TICK_MS = 30 * 1000;
 // Stations that failed for a network reason are resolved again this often.
 const RESOLVE_RETRY_MS = 5 * 60 * 1000;
+// A station id the API no longer knows (the SNCF renumbering of 24 November
+// 2026) makes the stations resolved again, at most this often.
+const RENEW_STATIONS_MS = 30 * 60 * 1000;
+// Trip keys kept for trips no longer configured (a trip set back keeps its device).
+const MAX_TRIP_KEYS = 20;
 
 const gladys = new GladysIntegration();
 
@@ -91,6 +96,12 @@ const sncf = createSncfClient({
 });
 const stations = createStations({ sncf, store: createStore('stations.json', { logger }) });
 const tracker = createTracker({ store: createStore('fired.json', { logger }) });
+// "<from>|<to>" as typed -> the key of the trip, the device external id: the
+// key is computed once, so a renumbering of the stations keeps the devices.
+const tripKeysStore = createStore('trips.json', { logger });
+let tripKeys = null;
+let lastStationsRenewal = 0;
+let renewTimer = null;
 
 /**
  * @description Remember the language of a request, and store it when it changed.
@@ -275,6 +286,11 @@ const watcher = createWatcher({
     await refreshStatus();
   },
   onError: async (trip, err) => {
+    if (err.isUnknownStation) {
+      renewStations([trip.from.id, trip.to.id]).catch((renewError) =>
+        logger.warn(`Unable to resolve the stations again: ${renewError.message}`),
+      );
+    }
     outcomes.set(trip.key, err);
     await publishTransport(trip);
     await refreshStatus();
@@ -309,6 +325,18 @@ async function checkReminders() {
  */
 async function resolveTrips() {
   clearTimeout(resolveTimer);
+  if (!tripKeys) {
+    const saved = await tripKeysStore.load({});
+    tripKeys = saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+  }
+  const keysBefore = JSON.stringify(tripKeys);
+  const keyOf = (entry, from, to) => {
+    const typed = `${String(entry.from).trim()}|${String(entry.to).trim()}`.toLowerCase();
+    if (typeof tripKeys[typed] !== 'string' || !/^[a-z0-9_]+-[a-z0-9_]+$/.test(tripKeys[typed])) {
+      tripKeys[typed] = tripKey(from, to);
+    }
+    return tripKeys[typed];
+  };
   const resolved = [];
   const unknown = [];
   let retry = false;
@@ -323,7 +351,7 @@ async function resolveTrips() {
           unknown.push(entry.to);
         }
         if (from && to && from.id !== to.id) {
-          const key = tripKey(from, to);
+          const key = keyOf(entry, from, to);
           if (!resolved.some((trip) => trip.key === key)) {
             resolved.push({ ...entry, from, to, key, name: `${from.name} → ${to.name}` });
           }
@@ -338,7 +366,7 @@ async function resolveTrips() {
             ...entry,
             from,
             to,
-            key: tripKey(from, to),
+            key: keyOf(entry, from, to),
             name: `${from.name} → ${to.name}`,
           });
         }
@@ -347,6 +375,11 @@ async function resolveTrips() {
   }
   trips = resolved;
   unknownStations = unknown;
+  const keys = Object.keys(tripKeys);
+  keys.slice(0, Math.max(0, keys.length - MAX_TRIP_KEYS)).forEach((key) => delete tripKeys[key]);
+  if (JSON.stringify(tripKeys) !== keysBefore) {
+    await tripKeysStore.save(tripKeys);
+  }
   if (retry) {
     resolveTimer = setTimeout(() => {
       resolveTrips()
@@ -355,6 +388,41 @@ async function resolveTrips() {
     }, RESOLVE_RETRY_MS);
     resolveTimer.unref?.();
   }
+}
+
+/**
+ * @description The API no longer knows some station ids (renumbered by the
+ * SNCF): forget them and resolve what the user typed again.
+ * @param {string[]} ids - The stop area ids used by the failed request.
+ * @returns {Promise<boolean>} True when the stations were resolved again.
+ */
+async function renewStations(ids) {
+  // Forgotten at once, so no request uses them again; resolved again at most
+  // every RENEW_STATIONS_MS (a renumbering fails every trip together).
+  const forgotten = await stations.forget(ids);
+  if (forgotten === 0) {
+    return false;
+  }
+  logger.warn(`Unknown station id(s) ${ids.join(', ')}: resolving the stations again`);
+  boards.clear();
+  const wait = lastStationsRenewal + RENEW_STATIONS_MS - Date.now();
+  if (wait > 0) {
+    if (!renewTimer) {
+      renewTimer = setTimeout(() => {
+        renewTimer = null;
+        lastStationsRenewal = Date.now();
+        resolveTrips()
+          .then(() => watcher.reschedule())
+          .catch((err) => logger.warn(`Unable to resolve the stations again: ${err.message}`));
+      }, wait);
+      renewTimer.unref?.();
+    }
+    return false;
+  }
+  lastStationsRenewal = Date.now();
+  await resolveTrips();
+  watcher.reschedule();
+  return true;
 }
 
 /**
@@ -421,6 +489,19 @@ gladys.onWidgetGet(WIDGETS.TRIP, async ({ settings = {}, language: lang }) => {
   }
 });
 
+/**
+ * @description Read the departures board of a station.
+ * @param {{ id: string }} station - The station.
+ * @returns {Promise<object>} The answer.
+ */
+function readBoard(station) {
+  return sncf.departures({
+    stopArea: station.id,
+    fromDatetime: toNavitiaDate(Date.now()),
+    count: BOARD_COUNT.max + 4,
+  });
+}
+
 gladys.onWidgetGet(WIDGETS.BOARD, async ({ settings = {}, language: lang }) => {
   rememberLanguage(lang);
   if (!config.apiKey) {
@@ -444,11 +525,24 @@ gladys.onWidgetGet(WIDGETS.BOARD, async ({ settings = {}, language: lang }) => {
     const stale = !board || Date.now() - board.at > BOARD_MAX_AGE_MS;
     // Out of quota, an old board is better than nothing.
     if (stale && (quota.canRequest() || !board)) {
-      const answer = await sncf.departures({
-        stopArea: station.id,
-        fromDatetime: toNavitiaDate(Date.now()),
-        count: BOARD_COUNT.max + 4,
-      });
+      let answer;
+      try {
+        answer = await readBoard(station);
+      } catch (err) {
+        if (!err.isUnknownStation || !(await renewStations([station.id]))) {
+          throw err;
+        }
+        // Renumbered: read the board of the station resolved again.
+        station = typed
+          ? await stations.resolve(typed)
+          : (resolveTrip(settings.trip)?.from ?? null);
+        if (!station) {
+          return messageContent(
+            t(typed ? 'unknownStation' : 'noStation', lang, { name: typed.slice(0, 60) }),
+          );
+        }
+        answer = await readBoard(station);
+      }
       board = { at: Date.now(), departures: parseDepartures(answer) };
       boards.set(station.id, board);
     }
@@ -628,6 +722,7 @@ gladys.handleShutdown(async (signal) => {
   logger.info(`Received ${signal} -> graceful shutdown`);
   watcher.stop();
   clearTimeout(resolveTimer);
+  clearTimeout(renewTimer);
   clearInterval(reminderTimer);
   await quota.flush();
   await tracker.persist(Date.now());

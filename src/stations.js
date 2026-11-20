@@ -10,6 +10,11 @@
 // A name is searched once and remembered (in /data, see store.js): the
 // first result of the SNCF search. When it is not the right one, the user
 // types the id the "Find a station" button shows instead.
+//
+// The SNCF renumbered its stations on 24 November 2026 (NeTEx / SIRI): a
+// remembered id the API no longer knows is forgotten (`forget`) and what the
+// user typed is resolved again. A UIC code is looked up on the codes of the
+// stations, the new ids no longer holding it.
 // -----------------------------------------------------------------------------
 
 import { isStopAreaId } from './sncf-api.js';
@@ -40,7 +45,7 @@ function createStations({ sncf, store = null }) {
   };
 
   const remember = (key, station) => {
-    cache[key] = { id: station.id, name: station.name };
+    cache[key] = { id: station.id, name: station.name, uic: station.uic || '' };
     const keys = Object.keys(cache);
     if (keys.length > MAX_CACHE_ENTRIES) {
       keys.slice(0, keys.length - MAX_CACHE_ENTRIES).forEach((old) => delete cache[old]);
@@ -52,7 +57,7 @@ function createStations({ sncf, store = null }) {
     /**
      * @description Resolve what the user typed.
      * @param {string} input - A name, a UIC code or a stop area id.
-     * @returns {Promise<{ id: string, name: string }|null>} The station, null when none matches.
+     * @returns {Promise<{ id: string, name: string, uic: string }|null>} The station, null when none matches.
      * @throws {SncfError} When the API fails (unreachable, refused key…).
      */
     async resolve(input) {
@@ -63,18 +68,20 @@ function createStations({ sncf, store = null }) {
       }
       const key = text.toLowerCase();
       if (cache[key]?.id) {
-        return cache[key];
+        return { uic: '', ...cache[key] };
       }
       const uic = UIC_REGEX.exec(text.replace(/\s/g, ''));
       let station;
-      if (isStopAreaId(text) || uic) {
-        station = await sncf.getStation(uic ? `stop_area:SNCF:${uic[1]}` : text);
+      if (uic) {
+        station = await sncf.getStationByUic(uic[1]);
+      } else if (isStopAreaId(text)) {
+        station = await sncf.getStation(text);
       } else {
         [station = null] = await sncf.searchStations(text, 1);
       }
       if (station) {
         remember(key, station);
-        return { id: station.id, name: station.name };
+        return { id: station.id, name: station.name, uic: station.uic || '' };
       }
       return null;
     },
@@ -85,13 +92,29 @@ function createStations({ sncf, store = null }) {
      * @returns {{ id: string, name: string }|null} The station.
      */
     peek(input) {
-      return (
+      const entry =
         cache[
           String(input ?? '')
             .trim()
             .toLowerCase()
-        ] ?? null
-      );
+        ] ?? null;
+      return entry ? { uic: '', ...entry } : null;
+    },
+
+    /**
+     * @description Forget the inputs resolved to station ids the API no longer knows.
+     * @param {string[]} ids - The stop area ids.
+     * @returns {Promise<number>} How many inputs were forgotten.
+     */
+    async forget(ids) {
+      await load();
+      const stale = new Set(ids);
+      const keys = Object.keys(cache).filter((key) => stale.has(cache[key]?.id));
+      keys.forEach((key) => delete cache[key]);
+      if (keys.length > 0) {
+        store?.save(cache);
+      }
+      return keys.length;
     },
   };
 }

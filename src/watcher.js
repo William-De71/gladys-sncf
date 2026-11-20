@@ -50,7 +50,12 @@ async function readTrip(sncf, trip, trainCount, now) {
     datetime: toNavitiaDate(span.from),
     count: Math.min(MAX_JOURNEYS, trainCount + 4),
   };
-  const stations = { from: trip.from.id, to: trip.to.id };
+  const stations = {
+    from: trip.from.id,
+    to: trip.to.id,
+    fromUic: trip.from.uic,
+    toUic: trip.to.uic,
+  };
   const base = parseJourneys(
     await sncf.journeys({ ...request, freshness: 'base_schedule' }),
     stations,
