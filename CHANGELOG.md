@@ -5,6 +5,12 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
+## [1.3.1] - 2026-11-20
+
+### Fixed
+
+- follow the SNCF station renumbering of 24 November 2026 ([7d5aabe](https://github.com/William-De71/gladys-sncf/commit/7d5aabe41ba16672f0a9e43e72aa108adf30e3f8))
+
 ## [1.3.0] - 2026-10-25
 
 ### Added
@@ -40,6 +46,7 @@ each release from the Conventional Commits: do not edit it by hand.
 
 * SNCF trains in real time: trip devices, delay and cancellation scenes, dashboard widgets ([40932a1](https://github.com/William-De71/gladys-sncf/commit/40932a1343f12545a4cee809827f0c748c7f81a1))
 
+[1.3.1]: https://github.com/William-De71/gladys-sncf/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/William-De71/gladys-sncf/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/William-De71/gladys-sncf/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/William-De71/gladys-sncf/compare/v1.1.0...v1.1.1
